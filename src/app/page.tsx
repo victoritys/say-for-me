@@ -327,7 +327,7 @@ export default function Page() {
       />
 
       <div className="absolute top-8 left-8 z-10">
-        <img src="/logo.svg" alt="Logo" className="w-12 h-12" />
+        <img src="/Logo.svg" alt="Logo" className="w-12 h-12" />
       </div>
 
       <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center z-10">
