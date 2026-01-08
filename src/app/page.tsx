@@ -1,389 +1,477 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
-type Audience = 'close' | 'coworker' | 'boss' | 'stranger';
-type Tone = 'soft' | 'neutral' | 'firm' | 'short';
+type Scenario = 'no' | 'reset' | 'apology' | 'ask';
+type Tone = 'soft' | 'firm';
 
-const audienceLabel: Record<Audience, string> = {
-  close: 'Близкий человек',
-  coworker: 'Коллега',
-  boss: 'Руководитель',
-  stranger: 'Незнакомец',
+const BASE_SCENARIOS: { id: Scenario; label: string }[] = [
+  { id: 'no', label: 'A clean, guilt-free "NO"' },
+  { id: 'reset', label: 'Reset the conversation' },
+  { id: 'apology', label: 'Own up and apologize' },
+  { id: 'ask', label: 'Ask confidently' },
+];
+
+const EXTRA_SITUATIONS = [
+  'Set a firm boundary',
+  'Push back with ease',
+  'Redirect the conversation',
+  'Decline for now',
+  'Say no, clearly',
+  'Set expectations',
+  'Pause the discussion',
+  'Hold your ground',
+  'Disagree with composure',
+  'Close the conversation',
+] as const;
+
+type ExtraSituation = (typeof EXTRA_SITUATIONS)[number];
+
+const EXTRA_TO_SCENARIO: Record<ExtraSituation, Scenario> = {
+  'Set a firm boundary': 'no',
+  'Push back with ease': 'no',
+  'Redirect the conversation': 'reset',
+  'Decline for now': 'no',
+  'Say no, clearly': 'no',
+  'Set expectations': 'ask',
+  'Pause the discussion': 'reset',
+  'Hold your ground': 'no',
+  'Disagree with composure': 'reset',
+  'Close the conversation': 'reset',
 };
 
-const toneLabel: Record<Tone, string> = {
-  soft: 'Мягко',
-  neutral: 'Нейтрально',
-  firm: 'Твёрдо',
-  short: 'Супер-коротко',
+const BANK: Record<Scenario, Record<Tone, string[]>> = {
+  no: {
+    soft: [
+      'Thanks for asking — I can’t do this right now.',
+      'I appreciate it, but I’ll have to say no.',
+      'I don’t have the capacity right now.',
+      'Not today, but I appreciate the offer.',
+      'I can’t commit to this. Hope you understand.',
+      'I’m going to pass this time — thank you.',
+      'I’m not able to do that, but thank you for thinking of me.',
+      'I can’t do that, and I want to be honest about it.',
+      'I’m going to say no, but I’m grateful you asked.',
+      'I can’t help with this one, but I hope it goes well.',
+    ],
+    firm: [
+      'No — I’m not available for this.',
+      'That won’t work for me.',
+      'I’m not taking this on.',
+      'I’m saying no.',
+      'This isn’t something I’ll do.',
+      'No. I’m not changing my decision.',
+      'Please move forward without me.',
+      'I’m not open to this.',
+      'No — and I need you to respect that.',
+      'I’m not available. Please plan without me.',
+    ],
+  },
+  reset: {
+    soft: [
+      'Can we restart this calmly?',
+      'Let’s take a breath and talk without blame.',
+      'I want to understand you — can we reset the tone?',
+      'Can we try again, slower and kinder?',
+      'I think we’re missing each other — can we rephrase?',
+      'Let’s pause and come back to this calmly.',
+      'I care about this conversation. Can we reset?',
+      'Let’s clarify what we’re trying to solve.',
+      'Can we focus on the point and keep it kind?',
+      'I’d like to continue, but in a calmer way.',
+    ],
+    firm: [
+      'This tone doesn’t work for me.',
+      'Pause. We can continue when it’s respectful.',
+      'I’m not continuing this conversation like this.',
+      'We can talk, but not in this format.',
+      'Stop. Let’s reset and speak normally.',
+      'If we continue — it has to be respectful.',
+      'We’re going in circles. Reset.',
+      'Let’s continue later when it’s calmer.',
+      'Let’s stick to facts and next steps.',
+      'I’m willing to talk, not to argue.',
+    ],
+  },
+  apology: {
+    soft: [
+      'I’m sorry — I came off harsh.',
+      'I didn’t mean to hurt you.',
+      'You didn’t deserve that tone. I’m sorry.',
+      'I see how that landed. I’m sorry.',
+      'I should’ve handled that better. I’m sorry.',
+      'I’m sorry for my part in this.',
+      'I hear you. I’m sorry.',
+      'I’m sorry. I want to make it right.',
+      'I’m sorry — I was overwhelmed and it showed.',
+      'I’m sorry, and I appreciate you telling me.',
+    ],
+    firm: [
+      'I was wrong. I take responsibility.',
+      'I’ll fix this by (time).',
+      'I apologize. Here’s what I’ll change: …',
+      'You’re right. That was on me.',
+      'I own that mistake.',
+      'I’m sorry. I’ll correct it today.',
+      'I accept responsibility. I’ll do better.',
+      'I apologize. Let’s move to the solution.',
+      'I’m sorry. I understand the impact.',
+      'I’ll make sure this doesn’t repeat.',
+    ],
+  },
+  ask: {
+    soft: [
+      'Could you help me with this?',
+      'Would you be open to helping me?',
+      'Can I ask for your support on this?',
+      'Could you please take a look when you have a moment?',
+      'Can you help me figure this out?',
+      'Would you mind doing (…)? It would help a lot.',
+      'If you have time, could you assist me with (…)?',
+      'Could you share your opinion on this?',
+      'Could you help me by (time), if possible?',
+      'If you can, please confirm you’re able to help.',
+    ],
+    firm: [
+      'I need this by (time). Can you confirm?',
+      'Please respond by (time) so I can proceed.',
+      'Can you do this today — yes or no?',
+      'I need a decision by (time).',
+      'Confirm your availability by (time).',
+      'I need your answer today.',
+      'Please confirm you’ll handle it.',
+      'I need a clear yes/no.',
+      'I’m moving forward at (time). Are you in?',
+      'Please prioritize this and update me.',
+    ],
+  },
 };
 
-/**
- * MVP без API:
- * генерим “достаточно хорошие” варианты через шаблоны.
- * Потом легко заменишь на fetch('/api/generate', ...)
- */
-function generateTemplates(input: string, a: Audience, t: Tone): string[] {
-  const cleaned = input.trim().replace(/\s+/g, ' ');
-  const who =
-    a === 'boss'
-      ? 'Коллеги,'
-      : a === 'coworker'
-      ? 'Привет!'
-      : a === 'close'
-      ? 'Привет.'
-      : 'Здравствуйте.';
-
-  const boundary =
-    a === 'boss'
-      ? 'Чтобы не сорвать сроки, мне нужно'
-      : a === 'coworker'
-      ? 'Чтобы нормально договориться, мне важно'
-      : a === 'close'
-      ? 'Мне важно'
-      : 'Мне нужно';
-
-  const soft = [
-    `${who} Хочу аккуратно сказать: ${cleaned}. ${boundary} сделать это по-другому. Давай обсудим удобный вариант?`,
-    `${who} Я немного волнуюсь, но скажу прямо: ${cleaned}. ${boundary} сохранить спокойный тон. Спасибо, что услышишь.`,
-    `${who} Возможно, я не идеально сформулирую, но: ${cleaned}. ${boundary} обозначить границу и не спорить. Ок?`,
-  ];
-
-  const neutral = [
-    `${who} По ситуации: ${cleaned}. ${boundary} договориться о следующем шаге: (1) что делаем, (2) до какого времени.`,
-    `${who} Сообщаю: ${cleaned}. ${boundary} зафиксировать вариант решения. Напиши, что выбираем.`,
-    `${who} Уточняю: ${cleaned}. ${boundary} прояснить ожидания и формат. Давай коротко синхронизируемся.`,
-  ];
-
-  const firm = [
-    `${who} Скажу прямо: ${cleaned}. ${boundary} чтобы дальше было именно так. Это важно для меня.`,
-    `${who} Я не готов(а) продолжать в таком формате: ${cleaned}. ${boundary} изменить условия, иначе я не смогу участвовать.`,
-    `${who} Фиксирую позицию: ${cleaned}. ${boundary} соблюдать границу. Прошу не возвращаться к этому в прежнем виде.`,
-  ];
-
-  const short = [
-    `${cleaned}. Давай так: без обсуждений — просто сделаем по-другому.`,
-    `${cleaned}. Я так не могу/не буду. Предлагаю другой вариант.`,
-    `${cleaned}. Пожалуйста, учти это дальше.`,
-  ];
-
-  if (t === 'soft') return soft;
-  if (t === 'neutral') return neutral;
-  if (t === 'firm') return firm;
-  return short;
+function pick<T>(arr: T[]) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function clampText(s: string, max = 700) {
-  return s.length > max ? s.slice(0, max).trim() + '…' : s;
+function SparklesIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M3 21L14.5 9.5" stroke="white" strokeWidth="2.2" strokeLinecap="round" />
+      <path
+        d="M12.8 6.2l1-2.7 1 2.7 2.7 1-2.7 1-1 2.7-1-2.7-2.7-1 2.7-1Z"
+        fill="white"
+      />
+    </svg>
+  );
 }
+
+function SearchIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M10.5 18.5a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" stroke="black" strokeWidth="2.2" />
+      <path d="M16.8 16.8 21 21" stroke="black" strokeWidth="2.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CheckInCircleIcon() {
+  return (
+    <svg width="44" height="44" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+      <circle cx="24" cy="24" r="18" fill="#0A0A0A" />
+      <path
+        d="M16.8 24.6l4.6 4.7 10-10.2"
+        stroke="white"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+type DropdownItem = { label: string; scenario: Scenario };
 
 export default function Page() {
-  const [input, setInput] = useState('');
-  const [audience, setAudience] = useState<Audience>('coworker');
-  const [tone, setTone] = useState<Tone>('neutral');
-  const [results, setResults] = useState<string[]>([]);
-  const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  const [scenario, setScenario] = useState<Scenario>('no');
+  const [tone, setTone] = useState<Tone>('soft');
 
-  const canGenerate = input.trim().length >= 8;
+  const [showResult, setShowResult] = useState(false);
+  const [result, setResult] = useState('');
 
-  const previewCards = useMemo(
-    () => [
-      {
-        title: 'Say.//ForMe',
-        metaLeft: 'Confidence',
-        metaRight: 'No drama',
-        chip: 'OPEN NOW',
-      },
-      {
-        title: 'Message\nGenerator',
-        metaLeft: '3 варианты',
-        metaRight: '1 клик',
-        chip: 'GENERATE',
-      },
-      {
-        title: 'Boundary.//Mode',
-        metaLeft: 'Tone',
-        metaRight: 'Short',
-        chip: 'LIMITED',
-      },
-    ],
-    []
-  );
+  const [searchOpen, setSearchOpen] = useState(false);
 
-  function onGenerate() {
-    if (!canGenerate) return;
-    const list = generateTemplates(clampText(input), audience, tone);
-    setResults(list);
-    setCopiedIdx(null);
+  const [topItem, setTopItem] = useState<DropdownItem>({ label: BASE_SCENARIOS[0].label, scenario: 'no' });
+  const [activeLabel, setActiveLabel] = useState<string>(BASE_SCENARIOS[0].label);
+
+  const scenariosOnUI = useMemo(() => {
+    return [
+      { id: topItem.scenario, label: topItem.label },
+      BASE_SCENARIOS[1],
+      BASE_SCENARIOS[2],
+      BASE_SCENARIOS[3],
+    ];
+  }, [topItem]);
+
+  const dropdownItems: DropdownItem[] = useMemo(() => {
+    const extras: DropdownItem[] = EXTRA_SITUATIONS.map((t) => ({
+      label: t,
+      scenario: EXTRA_TO_SCENARIO[t],
+    }));
+
+    const baseTop: DropdownItem = { label: BASE_SCENARIOS[0].label, scenario: 'no' };
+
+    const filteredExtras = extras.filter((x) => x.label !== topItem.label);
+
+    if (topItem.label !== baseTop.label) return [baseTop, ...filteredExtras];
+    return filteredExtras;
+  }, [topItem]);
+
+  const girlSrc = showResult ? '/girl_after.png' : '/girl.png';
+
+  function hideResult() {
+    setShowResult(false);
   }
 
-  async function copy(text: string, idx: number) {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedIdx(idx);
-      setTimeout(() => setCopiedIdx(null), 1200);
-    } catch {
-      // ignore
+  function generateNext() {
+    const list = BANK[scenario][tone];
+    if (!list?.length) return;
+
+    let next = pick(list);
+
+    if (list.length > 1) {
+      let guard = 0;
+      while (next === result && guard < 20) {
+        next = pick(list);
+        guard++;
+      }
+      if (next === result) {
+        const idx = list.indexOf(result);
+        next = list[(idx + 1) % list.length];
+      }
     }
+
+    setResult(next);
+    setShowResult(true);
   }
 
-  function nudge(kind: 'shorter' | 'softer' | 'firmer') {
-    if (!results.length) return;
-    if (kind === 'shorter') setTone('short');
-    if (kind === 'softer') setTone('soft');
-    if (kind === 'firmer') setTone('firm');
-    const list = generateTemplates(clampText(input), audience, kind === 'shorter' ? 'short' : kind === 'softer' ? 'soft' : 'firm');
-    setResults(list);
-    setCopiedIdx(null);
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(result);
+    } catch {}
   }
+
+  // ---------- styles ----------
+  const textSize = 'text-sm';
+
+  // ✅ МОМЕНТАЛЬНО: без duration и без delay
+  // ✅ Hover белый только на неактивных
+  const btnBaseCommon = `w-full text-left px-6 py-3 ${textSize} font-bold select-none rounded-full transition-none`;
+
+  // inactive: hover = белый + микролёгкий lift (моментально)
+  const btnInactive =
+    `${btnBaseCommon} bg-[#e8eaed] text-black ` +
+    `hover:bg-white hover:-translate-y-[1px] hover:shadow-[0_10px_20px_rgba(0,0,0,0.08)] ` +
+    `active:translate-y-0 active:shadow-none`;
+
+  // active: НИКАКИХ hover эффектов
+  const btnActive = `${btnBaseCommon} bg-black text-white`;
+
+  const toneBtnBaseCommon = `flex-1 px-6 py-3 ${textSize} font-bold rounded-full select-none transition-none`;
+
+  const toneInactive =
+    `${toneBtnBaseCommon} bg-[#e8eaed] text-black ` +
+    `hover:bg-white hover:-translate-y-[1px] hover:shadow-[0_10px_20px_rgba(0,0,0,0.08)] ` +
+    `active:translate-y-0 active:shadow-none`;
+
+  const toneActive = `${toneBtnBaseCommon} bg-black text-white`;
+
+  const panelW = 'w-[340px]';
+  const panelH = 'h-[610px]';
+  const panelRadius = 'rounded-[160px]';
+
+  const panelGlass =
+    'bg-white/28 backdrop-blur-xl border border-white/35 shadow-[0_18px_60px_rgba(0,0,0,0.10)]';
+
+  const actionBtn =
+    'w-16 h-16 rounded-full font-bold shadow-xl transition-none hover:scale-105 active:scale-100';
+
+  const panelPadLeft = 'px-11 pt-28 pb-16';
+  const panelPadRight = 'px-11 pt-32 pb-16';
 
   return (
-    <main className="min-h-screen text-white">
-      {/* Background */}
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(1200px_800px_at_20%_20%,rgba(168,85,247,0.55),transparent_55%),radial-gradient(1000px_700px_at_80%_30%,rgba(99,102,241,0.55),transparent_55%),radial-gradient(1000px_700px_at_60%_80%,rgba(34,197,94,0.22),transparent_55%),linear-gradient(180deg,#2b0a48_0%,#0a0616_55%,#05040b_100%)]" />
-      <div className="mx-auto max-w-6xl px-5 py-10 md:py-14">
-        {/* Top bar */}
-        <header className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.35)] ring-1 ring-white/15 backdrop-blur" />
-            <div className="leading-tight">
-              <div className="text-sm text-white/70">Vibe MVP</div>
-              <div className="font-semibold tracking-tight">Say.//ForMe</div>
-            </div>
-          </div>
-          <a
-            className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium ring-1 ring-white/15 backdrop-blur hover:bg-white/15"
-            href="#generator"
+    <div className="w-full h-screen bg-[#c5cdd8] relative overflow-hidden text-black">
+      {/* ✅ тонкий серый скролл (только для этой страницы) */}
+      <style jsx global>{`
+        .thin-scroll {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(0, 0, 0, 0.28) transparent;
+        }
+        .thin-scroll::-webkit-scrollbar {
+          width: 6px;
+        }
+        .thin-scroll::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .thin-scroll::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.28);
+          border-radius: 999px;
+        }
+      `}</style>
+
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `url('${girlSrc}')`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center bottom',
+          backgroundSize: '520px auto',
+        }}
+      />
+
+      <div className="absolute top-8 left-8 z-10">
+        <img src="/logo.svg" alt="Logo" className="w-12 h-12" />
+      </div>
+
+      <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center z-10">
+        <img src="/title.svg" alt="SAY IT FOR ME" className="h-[64px] w-auto mx-auto" draggable={false} />
+        <p className="text-lg text-black mt-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+          Your assistant when words are hard to find
+        </p>
+      </div>
+
+      {/* LEFT PANEL */}
+      <div
+        className={`absolute left-12 top-32 z-30 relative ${panelGlass} ${panelRadius} ${panelW} ${panelH} ${panelPadLeft} flex flex-col`}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className={`${textSize} font-bold text-black/70`}>Situation</div>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSearchOpen((v) => !v);
+            }}
+            className="w-9 h-9 grid place-items-center bg-transparent hover:bg-white/60 rounded-full transition-none"
+            aria-label="Search situations"
           >
-            Open
-          </a>
-        </header>
+            <SearchIcon />
+          </button>
+        </div>
 
-        {/* Hero */}
-        <section className="mt-10 grid items-center gap-8 md:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <h1 className="text-balance text-5xl font-extrabold tracking-tight md:text-6xl">
-              Message
-              <span className="block text-white/80">without drama</span>
-            </h1>
-
-            <p className="mt-4 max-w-xl text-pretty text-base text-white/70 md:text-lg">
-              Одна боль — одно решение: сложно написать сообщение? Введи ситуацию → выбери «кому» и тон → получи 3 готовых
-              варианта, которые держат границу и звучат нормально.
-            </p>
-
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <a
-                href="#generator"
-                className="group inline-flex items-center gap-2 rounded-full bg-lime-400 px-5 py-3 text-sm font-extrabold tracking-wide text-black shadow-[0_18px_50px_rgba(163,230,53,0.35)] hover:bg-lime-300"
-              >
-                GENERATE NOW
-                <span className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
-              </a>
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-3 text-sm ring-1 ring-white/15 backdrop-blur">
-                <span className="h-2 w-2 rounded-full bg-lime-400" />
-                No login • No signup • MVP
-              </div>
-            </div>
-          </div>
-
-          {/* Phone cards mock */}
-          <div className="relative mx-auto w-full max-w-md">
-            <div className="absolute -left-10 -top-10 h-44 w-44 rounded-[36px] bg-white/10 blur-2xl" />
-            <div className="absolute -right-6 top-10 h-36 w-36 rounded-full bg-lime-400/20 blur-2xl" />
-
-            <div className="grid gap-4">
-              {previewCards.map((c, i) => (
-                <div
-                  key={i}
-                  className="relative overflow-hidden rounded-[34px] bg-black/65 p-5 shadow-[0_25px_80px_rgba(0,0,0,0.55)] ring-1 ring-white/15 backdrop-blur"
+        {/* Dropdown — белый + тонкий серый скролл */}
+        {searchOpen && (
+          <div className="absolute left-11 right-11 top-[152px] z-50 rounded-[26px] bg-white shadow-lg overflow-hidden">
+            <div className="max-h-[290px] overflow-auto py-2 thin-scroll">
+              {dropdownItems.map((item) => (
+                <button
+                  key={item.label}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // ✅ активное состояние меняется “моментально” (hover тоже сразу станет черным)
+                    setTopItem(item);
+                    setScenario(item.scenario);
+                    setActiveLabel(item.label);
+                    setSearchOpen(false);
+                    hideResult();
+                  }}
+                  className={
+                    'w-full text-left px-5 py-3 text-sm font-bold text-black select-none transition-none ' +
+                    'hover:bg-white hover:-translate-y-[1px] hover:shadow-[0_10px_20px_rgba(0,0,0,0.08)] ' +
+                    'active:translate-y-0 active:shadow-none'
+                  }
                 >
-                  {/* “Notch” */}
-                  <div className="mx-auto mb-4 h-6 w-28 rounded-full bg-white/10" />
-
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="whitespace-pre-line text-3xl font-extrabold leading-[0.95] tracking-tight">
-                      {c.title}
-                    </div>
-                    <div className="rounded-full bg-lime-400 px-3 py-1 text-xs font-extrabold tracking-wide text-black">
-                      {c.chip}
-                    </div>
-                  </div>
-
-                  <div className="mt-6 grid grid-cols-2 gap-3 text-sm text-white/70">
-                    <div className="rounded-2xl bg-white/5 p-3 ring-1 ring-white/10">
-                      <div className="text-xs text-white/50">Left</div>
-                      <div className="font-semibold text-white/85">{c.metaLeft}</div>
-                    </div>
-                    <div className="rounded-2xl bg-white/5 p-3 ring-1 ring-white/10">
-                      <div className="text-xs text-white/50">Right</div>
-                      <div className="font-semibold text-white/85">{c.metaRight}</div>
-                    </div>
-                  </div>
-
-                  {/* “3D blob” */}
-                  <div className="pointer-events-none absolute -right-10 -top-8 h-40 w-40 rounded-full bg-[radial-gradient(circle_at_30%_30%,#ffffff_0%,#d1d5db_25%,#6b7280_60%,rgba(0,0,0,0)_70%)] opacity-60 blur-[0.2px]" />
-                  <div className="pointer-events-none absolute -left-12 bottom-[-48px] h-44 w-44 rounded-full bg-[radial-gradient(circle_at_35%_35%,#ffffff_0%,#e5e7eb_25%,#9ca3af_58%,rgba(0,0,0,0)_72%)] opacity-35" />
-                </div>
+                  {item.label}
+                </button>
               ))}
             </div>
           </div>
-        </section>
+        )}
 
-        {/* Generator */}
-        <section id="generator" className="mt-12 md:mt-16">
-          <div className="rounded-[36px] bg-white/5 p-5 ring-1 ring-white/10 backdrop-blur md:p-7">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <h2 className="text-2xl font-extrabold tracking-tight md:text-3xl">Generate a message</h2>
-                <p className="mt-1 text-sm text-white/65">
-                  Опиши ситуацию простыми словами. Мы соберём сообщение, которое можно сразу отправить.
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => nudge('shorter')}
-                  className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold ring-1 ring-white/15 hover:bg-white/15"
-                  type="button"
-                >
-                  Короче
-                </button>
-                <button
-                  onClick={() => nudge('softer')}
-                  className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold ring-1 ring-white/15 hover:bg-white/15"
-                  type="button"
-                >
-                  Мягче
-                </button>
-                <button
-                  onClick={() => nudge('firmer')}
-                  className="rounded-full bg-white/10 px-4 py-2 text-sm font-semibold ring-1 ring-white/15 hover:bg-white/15"
-                  type="button"
-                >
-                  Жёстче
-                </button>
-              </div>
-            </div>
+        {/* Situation buttons */}
+        <div className="space-y-3">
+          {scenariosOnUI.map((s) => {
+            const isActive = activeLabel === s.label;
+            return (
+              <button
+                key={s.label}
+                onClick={() => {
+                  setScenario(s.id);
+                  setActiveLabel(s.label);
+                  hideResult();
+                }}
+                className={isActive ? btnActive : btnInactive}
+              >
+                {s.label}
+              </button>
+            );
+          })}
+        </div>
 
-            <div className="mt-5 grid gap-4 md:grid-cols-[1fr_0.9fr]">
-              {/* Left */}
-              <div className="rounded-[28px] bg-black/55 p-4 ring-1 ring-white/10 md:p-5">
-                <label className="text-sm font-semibold text-white/80">Ситуация</label>
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  placeholder="Например: Мне снова поставили задачу в последний момент, и я не успеваю без переработок."
-                  className="mt-2 h-36 w-full resize-none rounded-2xl bg-white/5 p-4 text-sm text-white outline-none ring-1 ring-white/10 placeholder:text-white/35 focus:ring-white/25"
-                />
+        {/* Tone */}
+        <div className="mt-5">
+          <div className={`${textSize} font-bold text-black/70 mb-3`}>Tone</div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                setTone('soft');
+                hideResult();
+              }}
+              className={tone === 'soft' ? toneActive : toneInactive}
+            >
+              Softly
+            </button>
 
-                <div className="mt-4 grid gap-3 md:grid-cols-2">
-                  <div>
-                    <div className="mb-2 text-xs font-semibold text-white/55">Кому</div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {(['close', 'coworker', 'boss', 'stranger'] as Audience[]).map((k) => (
-                        <button
-                          key={k}
-                          type="button"
-                          onClick={() => setAudience(k)}
-                          className={[
-                            'rounded-2xl px-3 py-2 text-xs font-semibold ring-1 transition',
-                            audience === k
-                              ? 'bg-white text-black ring-white'
-                              : 'bg-white/5 text-white/70 ring-white/10 hover:bg-white/10',
-                          ].join(' ')}
-                        >
-                          {audienceLabel[k]}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="mb-2 text-xs font-semibold text-white/55">Тон</div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {(['soft', 'neutral', 'firm', 'short'] as Tone[]).map((k) => (
-                        <button
-                          key={k}
-                          type="button"
-                          onClick={() => setTone(k)}
-                          className={[
-                            'rounded-2xl px-3 py-2 text-xs font-semibold ring-1 transition',
-                            tone === k
-                              ? 'bg-lime-400 text-black ring-lime-300'
-                              : 'bg-white/5 text-white/70 ring-white/10 hover:bg-white/10',
-                          ].join(' ')}
-                        >
-                          {toneLabel[k]}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={onGenerate}
-                  disabled={!canGenerate}
-                  className={[
-                    'mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-extrabold tracking-wide shadow-[0_18px_50px_rgba(163,230,53,0.20)] transition',
-                    canGenerate ? 'bg-lime-400 text-black hover:bg-lime-300' : 'bg-white/10 text-white/40',
-                  ].join(' ')}
-                >
-                  <span className="h-2 w-2 rounded-full bg-black/70" />
-                  Сгенерировать
-                </button>
-
-                <div className="mt-3 text-xs text-white/45">
-                  Подсказка: минимум 8 символов. Сейчас: {input.trim().length}
-                </div>
-              </div>
-
-              {/* Right */}
-              <div className="rounded-[28px] bg-black/45 p-4 ring-1 ring-white/10 md:p-5">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-semibold text-white/80">Результаты</div>
-                  <div className="rounded-full bg-white/10 px-3 py-1 text-xs text-white/65 ring-1 ring-white/15">
-                    {audienceLabel[audience]} • {toneLabel[tone]}
-                  </div>
-                </div>
-
-                <div className="mt-3 grid gap-3">
-                  {results.length === 0 ? (
-                    <div className="rounded-2xl bg-white/5 p-4 text-sm text-white/55 ring-1 ring-white/10">
-                      Тут появятся 3 варианта сообщения. Нажми “Сгенерировать”.
-                    </div>
-                  ) : (
-                    results.map((r, idx) => (
-                      <div key={idx} className="rounded-2xl bg-white/5 p-4 ring-1 ring-white/10">
-                        <div className="text-xs font-semibold text-white/45">Option {idx + 1}</div>
-                        <div className="mt-2 text-sm leading-relaxed text-white/85">{r}</div>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          <button
-                            onClick={() => copy(r, idx)}
-                            className="rounded-full bg-white/10 px-3 py-2 text-xs font-semibold ring-1 ring-white/15 hover:bg-white/15"
-                            type="button"
-                          >
-                            {copiedIdx === idx ? 'Скопировано ✓' : 'Копировать'}
-                          </button>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                <div className="mt-4 rounded-2xl bg-white/5 p-4 text-xs text-white/55 ring-1 ring-white/10">
-                  MVP сейчас без AI-API, чтобы работало бесплатно. Когда захочешь — добавим /api/generate и подключим модель.
-                </div>
-              </div>
-            </div>
+            <button
+              onClick={() => {
+                setTone('firm');
+                hideResult();
+              }}
+              className={tone === 'firm' ? toneActive : toneInactive}
+            >
+              Firmly
+            </button>
           </div>
-        </section>
+        </div>
 
-        <footer className="mt-10 pb-6 text-center text-xs text-white/40">
-          Made for vibe-coding • Next.js + Tailwind
-        </footer>
+        <div className="flex-1" />
+
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={generateNext}
+            className={`${actionBtn} bg-[#6fbf3f] text-white flex items-center justify-center`}
+            aria-label="Generate phrase"
+          >
+            <SparklesIcon />
+          </button>
+        </div>
       </div>
-    </main>
+
+      {/* RIGHT PANEL */}
+      <div
+        className={`absolute right-12 top-32 z-10 ${panelGlass} ${panelRadius} ${panelW} ${panelH} ${panelPadRight} flex flex-col`}
+        style={{ visibility: showResult ? 'visible' : 'hidden' }}
+        aria-hidden={!showResult}
+      >
+        <div className="flex justify-center">
+          <CheckInCircleIcon />
+        </div>
+
+        <div className="flex-1 flex items-center justify-center px-8">
+          <div className="text-black text-[18px] font-bold leading-tight text-center whitespace-pre-line max-w-[260px]">
+            {result}
+          </div>
+        </div>
+
+        <div className="flex justify-center gap-4 mt-4">
+          <button onClick={copy} className={`${actionBtn} bg-[#6fbf3f] text-white`}>
+            Copy
+          </button>
+          <button onClick={generateNext} className={`${actionBtn} bg-black text-white`}>
+            Again
+          </button>
+        </div>
+      </div>
+
+      <div className="absolute bottom-8 left-12 text-2xl font-normal text-black z-10">Atoyiae</div>
+    </div>
   );
 }
