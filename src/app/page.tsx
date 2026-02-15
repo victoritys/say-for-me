@@ -974,6 +974,67 @@ function TelegramButton({ size = 40 }: { size?: number }) {
   );
 }
 
+function MobileLanguageSelector({ lang, setLang }: { lang: 'EN' | 'SR' | 'ES'; setLang: (l: 'EN' | 'SR' | 'ES') => void }) {
+  const [expanded, setExpanded] = useState(false);
+  const languages: ('EN' | 'SR' | 'ES')[] = ['EN', 'SR', 'ES'];
+
+  // Sort languages so active is first when expanded? Or keep fixed order?
+  // "chosen value... always on top" for search was requested.
+  // For language, usually you want the *selected* one to be the trigger.
+  // When expanded, if it's a dropdown, usually it shows list.
+  // If we want "expand downwards", maybe just show the list.
+
+  // Design:
+  // Collapsed: [ Active ]
+  // Expanded:
+  // [ Active ]
+  // [ Option 2 ]
+  // [ Option 3 ]
+
+  // So efficient selection: 
+  // Tap active -> Expand.
+  // Tap another -> Select & Collapse.
+  // Tap active again -> Collapse.
+
+  // Let's keep the active one at the top for consistent UI position?
+  // Or transparently reveal others below? 
+  // Let's try: Always show active one at top.
+
+  const sortedLangs = useMemo(() => {
+    return [lang, ...languages.filter(l => l !== lang)];
+  }, [lang]);
+
+  if (!expanded) {
+    return (
+      <div className="bg-white/40 backdrop-blur-md rounded-full px-1 py-1 shadow-sm border border-white/20 pointer-events-auto">
+        <LangPill
+          className="w-8 h-8 text-[10px]"
+          label={lang}
+          active={true}
+          onClick={() => setExpanded(true)}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-1 bg-white/40 backdrop-blur-md rounded-full p-1 shadow-sm border border-white/20 animate-in fade-in zoom-in duration-200 pointer-events-auto">
+      {sortedLangs.map((l) => (
+        <LangPill
+          key={l}
+          className="w-8 h-8 text-[10px]"
+          label={l}
+          active={lang === l}
+          onClick={() => {
+            if (lang !== l) setLang(l);
+            setExpanded(false);
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 function LangPill({ label, active, onClick, className = '' }: { label: string; active: boolean; onClick: () => void; className?: string }) {
   return (
     <button
@@ -1001,11 +1062,15 @@ function SavedList({
   onRemove,
   onSpeak,
   lang,
+  onActiveChange,
+  isMobile = false,
 }: {
   favorites: string[];
   onRemove: (id: string) => void;
   onSpeak: (text: string, language: 'EN' | 'SR' | 'ES') => void;
   lang: 'EN' | 'SR' | 'ES';
+  onActiveChange?: (phrase: PhraseEntry | null) => void;
+  isMobile?: boolean;
 }) {
   const allPhrases = useMemo(() => Object.values(BANK).flat(), []);
   const savedPhrases = useMemo(() => allPhrases.filter((p) => favorites.includes(p.id)), [allPhrases, favorites]);
@@ -1024,6 +1089,19 @@ function SavedList({
       setActiveIndex(savedPhrases.length - 1);
     }
   }, [savedPhrases.length, activeIndex]);
+
+  // Notify parent about active item changes (Mobile only)
+  useEffect(() => {
+    if (isMobile && onActiveChange) {
+      if (savedPhrases.length > 0) {
+        // Ensure index is valid
+        const idx = Math.min(activeIndex, savedPhrases.length - 1);
+        onActiveChange(savedPhrases[idx]);
+      } else {
+        onActiveChange(null);
+      }
+    }
+  }, [activeIndex, savedPhrases, isMobile, onActiveChange]);
 
   if (savedPhrases.length === 0) return null;
 
@@ -1090,6 +1168,19 @@ function SavedList({
   const handleMouseUp = () => handleEnd();
 
   const currentPhrase = savedPhrases[activeIndex];
+  const scenarioId = currentPhrase.id.split('-').slice(0, -1).join('-');
+  // If parsing fails or assumes standard format (e.g. 'delivery-1'), join back everything except last part
+  // Actually IDs are like 'how-are-you-1'. So we need to handle that.
+  // Better: loop through BASE_SCENARIOS and find one that the ID starts with? 
+  // Or just roughly parse.
+
+  // Let's use a safer lookup or just the parsed ID if simple. 
+  // The IDs correspond exactly to scenario IDs + number (e.g. 'delivery-1'). 
+  // But some have hyphens (how-are-you). 
+  // Let's try to match logic. 
+
+  const matchedScenario = BASE_SCENARIOS.find(s => currentPhrase.id.startsWith(s.id + '-'));
+  const scenarioLabel = matchedScenario ? matchedScenario.label : 'Saved';
 
   return (
     <div className="h-full w-full relative">
@@ -1123,13 +1214,13 @@ function SavedList({
               </div>
             </div>
           ))}
-          < div className="h-4" />
+          <div className="h-4" />
         </div>
       </div>
 
       {/* MOBILE: Swipeable Stack */}
-      <div className="min-[1200px]:hidden flex flex-col items-center justify-start h-full pt-4">
-        <div className="relative w-full max-w-[320px] aspect-[16/10] perspective-[1000px]">
+      <div className="min-[1200px]:hidden flex flex-col items-center justify-start h-full pt-0">
+        <div className="relative w-full max-w-[320px] h-[140px] perspective-[1000px]">
           {/* Card Stack (Visual Only) */}
           {savedPhrases.length > 1 && (
             <div className="absolute inset-x-4 top-4 bottom-[-4px] bg-white/30 backdrop-blur-sm rounded-[24px] border border-white/20 transform translate-z-[-10px] scale-[0.95]" />
@@ -1138,7 +1229,7 @@ function SavedList({
           {/* Active Card */}
           <div
             key={currentPhrase.id} // Force re-render on card change
-            className={`absolute inset-0 bg-white/20 backdrop-blur-xl rounded-[24px] p-4 shadow-xl border border-white/40 flex flex-col justify-between select-none touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            className={`absolute inset-0 bg-white/20 backdrop-blur-xl rounded-[24px] p-4 shadow-xl border border-white/40 flex flex-col select-none touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             style={{
               transform: `translateX(${exitX !== null ? exitX : dragX}px) rotate(${(exitX !== null ? exitX : dragX) * 0.08}deg)`,
               transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
@@ -1151,47 +1242,34 @@ function SavedList({
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
           >
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="text-black/40 text-[10px] font-bold tracking-widest uppercase">
-                  Saved {activeIndex + 1} / {savedPhrases.length}
-                </div>
-              </div>
-              <div className="font-bold text-black text-xl leading-snug mb-1">
-                {lang === 'EN' ? currentPhrase.text : (currentPhrase.translations[lang] || currentPhrase.text)}
-              </div>
-              <div className="text-black/50 text-base font-medium leading-tight">
-                {currentPhrase.translations.RU}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between mt-auto pt-3 border-t border-black/5">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => onSpeak(currentPhrase.text, lang)}
-                  className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center active:bg-black/10"
-                >
-                  <SpeakerIcon size={20} />
-                </button>
-
+            <div className="flex items-center justify-between mb-0 shrink-0">
+              <div className="text-black/40 text-[10px] truncate max-w-[200px]">
+                {scenarioLabel} {activeIndex + 1}/{savedPhrases.length}
               </div>
               <button
                 onClick={() => onRemove(currentPhrase.id)}
-                className="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center shadow-sm"
+                className="w-8 h-8 rounded-full bg-white/50 flex items-center justify-center shadow-sm -mr-1"
               >
-                <HeartIcon filled={true} size={20} />
+                <HeartIcon filled={true} size={16} />
               </button>
+            </div>
+
+            <div className="flex-1 flex flex-col justify-center">
+              <div className="font-bold text-black text-[14px] leading-snug mb-1">
+                {lang === 'EN' ? currentPhrase.text : (currentPhrase.translations[lang] || currentPhrase.text)}
+              </div>
+              <div className="text-black/50 text-[11px] font-medium leading-tight">
+                {currentPhrase.translations.RU}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Helper text */}
-        <div className="mt-8 text-black/30 text-xs font-medium uppercase tracking-widest">
-          {savedPhrases.length > 1 ? '← Swipe to browse →' : 'Your saved phrase'}
-        </div>
+
       </div>
-    </div >
+    </div>
   );
+
 }
 
 export default function Page() {
@@ -1259,6 +1337,7 @@ export default function Page() {
   const desktopSearchRef = useRef<HTMLDivElement>(null);
   const desktopSearchBtnRef = useRef<HTMLButtonElement>(null);
   const mobileSettingsRef = useRef<HTMLDivElement>(null);
+  const mobileSearchBtnRef = useRef<HTMLButtonElement>(null);
 
   const [activeTags, setActiveTags] = useState<string[]>([]);
 
@@ -1270,14 +1349,25 @@ export default function Page() {
 
   const dropdownItems = useMemo<DropdownItem[]>(() => {
     const q = searchQuery.toLowerCase().trim();
-    if (!q) return BASE_SCENARIOS.map((s) => ({ label: s.label, scenario: s.id }));
+    let items = BASE_SCENARIOS;
 
-    return BASE_SCENARIOS.filter((s) => {
-      const labelMatch = s.label.toLowerCase().includes(q);
-      const keywordMatch = s.keywords?.some((k) => k.toLowerCase().includes(q));
-      return labelMatch || keywordMatch;
-    }).map((s) => ({ label: s.label, scenario: s.id }));
-  }, [searchQuery]);
+    if (q) {
+      items = BASE_SCENARIOS.filter((s) => {
+        const labelMatch = s.label.toLowerCase().includes(q);
+        const keywordMatch = s.keywords?.some((k) => k.toLowerCase().includes(q));
+        return labelMatch || keywordMatch;
+      });
+    }
+
+    // Sort: current scenario first
+    const sorted = [...items].sort((a, b) => {
+      if (a.id === scenario) return -1;
+      if (b.id === scenario) return 1;
+      return 0;
+    });
+
+    return sorted.map((s) => ({ label: s.label, scenario: s.id }));
+  }, [searchQuery, scenario]);
 
   // Initial state: filter visible scenarios, limit to first 5
   const [scenariosOnUI, setScenariosOnUI] = useState(() => {
@@ -1288,7 +1378,24 @@ export default function Page() {
     setScenario(item.scenario);
     setActiveLabel(item.label);
     setTopItem(item); // For mobile header
-    hideResult();
+
+    // Immediately generate a result
+    if (item.scenario !== 'saved') {
+      const scenarioId = item.scenario as BankScenario;
+      const list = BANK[scenarioId];
+      if (list && list.length > 0) {
+        const randomPhrase = pick(list);
+        if (randomPhrase) {
+          setResult(randomPhrase);
+          setShowResult(true);
+        }
+      } else {
+        hideResult();
+      }
+    } else {
+      hideResult();
+    }
+
     setActiveTags([]); // Reset tags on scenario change
     setSearchQuery(''); // Clear search on select
 
@@ -1328,7 +1435,13 @@ export default function Page() {
         setSearchOpenDesktop(false);
         setSearchQuery('');
       }
-      if (settingsOpenMobile && mobileSettingsRef.current && !mobileSettingsRef.current.contains(event.target as Node)) {
+      if (
+        settingsOpenMobile &&
+        mobileSettingsRef.current &&
+        !mobileSettingsRef.current.contains(event.target as Node) &&
+        mobileSearchBtnRef.current &&
+        !mobileSearchBtnRef.current.contains(event.target as Node)
+      ) {
         setSettingsOpenMobile(false);
         setSearchOpenMobile(false);
       }
@@ -1452,6 +1565,15 @@ export default function Page() {
   const mobileRound = 'rounded-[26px]';
 
   const iconOnlyBtn = 'w-10 h-10 rounded-full grid place-items-center transition-none bg-transparent hover:bg-white/55';
+
+  const [activeSavedPhrase, setActiveSavedPhrase] = useState<PhraseEntry | null>(null);
+
+  // Reset active saved phrase when leaving saved scenario
+  useEffect(() => {
+    if (scenario !== 'saved') {
+      setActiveSavedPhrase(null);
+    }
+  }, [scenario]);
 
   return (
     <div className="w-full h-[100svh] bg-[#c5cdd8] relative overflow-hidden text-black">
@@ -1822,7 +1944,12 @@ export default function Page() {
 
       {/* =============== MOBILE / TABLET (<1200) =============== */}
       <div className="mobileOnly">
-        <div className="absolute top-5 right-5 z-10">
+        {/* Language Selector Top Left */}
+        <div className="absolute top-4 left-5 z-50 flex flex-col items-start">
+          <MobileLanguageSelector lang={lang} setLang={setLang} />
+        </div>
+
+        <div className="absolute top-4 right-5 z-10">
           <TelegramButton size={38} />
         </div>
 
@@ -1835,7 +1962,7 @@ export default function Page() {
           </p>
         </div>
 
-        <div className="absolute left-0 right-0 top-[110px] md:top-[148px] bottom-[92px] px-4 md:px-6 z-20">
+        <div className="absolute left-0 right-0 top-[90px] md:top-[148px] bottom-[92px] px-4 md:px-6 z-20">
           <div className="h-full flex flex-col items-center">
             <div className="w-full max-w-[560px] md:max-w-[860px]">
               <div className="h-[340px] md:h-[520px] flex items-start justify-center relative">
@@ -1859,72 +1986,50 @@ export default function Page() {
                         onRemove={toggleFavorite}
                         onSpeak={speakText}
                         lang={lang}
+                        isMobile={true}
+                        onActiveChange={setActiveSavedPhrase}
                       />
-                      <div className="absolute bottom-44 left-0 right-0 flex justify-center z-20 pointer-events-none">
-                        <div className="pointer-events-auto bg-white/70 backdrop-blur-md rounded-full padding-1 px-1 py-1 flex gap-1 shadow-lg border border-white/20">
-                          <LangPill label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
-                          <LangPill label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
-                          <LangPill label="ES" active={lang === 'ES'} onClick={() => setLang('ES')} />
-                        </div>
-                      </div>
                     </div>
                   )) : showResult ? (
-                    <div
-                      className={`${glass} rounded-[34px] md:rounded-[44px] px-5 py-5 md:px-10 md:py-8 w-full ${isResultDragging ? 'cursor-grabbing' : ''}`}
-                      style={{
-                        transform: `translateX(${resultExitX !== null ? resultExitX : resultDragX}px) rotate(${(resultExitX !== null ? resultExitX : resultDragX) * 0.05}deg)`,
-                        transition: isResultDragging ? 'none' : 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                      }}
-                      onTouchStart={handleResultTouchStart}
-                      onTouchMove={handleResultTouchMove}
-                      onTouchEnd={handleResultTouchEnd}
-                    >
-                      {/* ✅ MOBILE/TABLET: languages LEFT, icons RIGHT */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2 md:gap-3 md:[&>button]:w-12 md:[&>button]:h-12 md:[&>button]:text-[13px]">
-                          <LangPill className="w-8 h-8 text-[10px] md:w-12 md:h-12 md:text-[13px]" label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
-                          <LangPill className="w-8 h-8 text-[10px] md:w-12 md:h-12 md:text-[13px]" label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
-                          <LangPill className="w-8 h-8 text-[10px] md:w-12 md:h-12 md:text-[13px]" label="ES" active={lang === 'ES'} onClick={() => setLang('ES')} />
-                        </div>
-                        {result && (
-                          <button
-                            onClick={() => toggleFavorite(result.id)}
-                            className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/20 hover:bg-white/40 border border-white/20 flex items-center justify-center shadow-sm transition-none active:scale-100"
-                            aria-label="Save"
+                    <div className="w-full h-full overflow-hidden flex flex-col relative py-2">
+                      <div className="flex flex-col items-center justify-start h-full pt-0">
+                        <div className="relative w-full max-w-[320px] h-[140px] perspective-[1000px]">
+                          <div
+                            className={`absolute inset-0 bg-white/20 backdrop-blur-xl rounded-[24px] p-4 shadow-xl border border-white/40 flex flex-col select-none touch-none ${isResultDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+                            style={{
+                              transform: `translateX(${resultExitX !== null ? resultExitX : resultDragX}px) rotate(${(resultExitX !== null ? resultExitX : resultDragX) * 0.05}deg)`,
+                              transition: isResultDragging ? 'none' : 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                            }}
+                            onTouchStart={handleResultTouchStart}
+                            onTouchMove={handleResultTouchMove}
+                            onTouchEnd={handleResultTouchEnd}
                           >
-                            <HeartIcon size={18} filled={favorites.includes(result.id)} />
-                          </button>
-                        )}
-                      </div>
+                            <div className="flex items-center justify-between mb-0 shrink-0">
+                              <div className="text-black/40 text-[10px] truncate max-w-[200px]">
+                                {activeLabel}
+                              </div>
+                              {result && (
+                                <button
+                                  onClick={() => toggleFavorite(result.id)}
+                                  className="w-8 h-8 rounded-full bg-white/50 flex items-center justify-center shadow-sm -mr-1"
+                                >
+                                  <HeartIcon size={16} filled={favorites.includes(result.id)} />
+                                </button>
+                              )}
+                            </div>
 
-
-
-                      <div className="mt-5 md:mt-7 text-black text-center max-w-full px-2">
-                        <div className="text-[15px] md:text-[21px] font-bold leading-snug whitespace-pre-line">
-                          {displayResult}
+                            <div className="flex-1 flex flex-col justify-center text-center">
+                              <div className="font-bold text-black text-[14px] leading-snug mb-1">
+                                {displayResult}
+                              </div>
+                              {result?.translations.RU && (
+                                <div className="text-black/50 text-[11px] font-medium leading-tight whitespace-pre-line">
+                                  {result?.translations.RU}
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        {result?.translations.RU && (
-                          <div className="mt-1 text-xs md:text-base text-black/60 font-medium whitespace-pre-line">
-                            {result?.translations.RU}
-                          </div>
-                        )}
-                        {result?.context && lang === 'EN' && (
-                          <div className="mt-2 text-xs text-black/40 font-medium italic whitespace-normal">
-                            Use when: {result.context}
-                          </div>
-                        )}
-                      </div>
-
-
-
-                      <div className="mt-5 md:mt-7 flex items-center justify-center gap-3 md:gap-4">
-
-                        <button
-                          onClick={generateNext}
-                          className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-black text-white font-bold shadow-xl transition-none active:scale-100 text-[11px] md:text-[12px]"
-                        >
-                          Again
-                        </button>
                       </div>
                     </div>
                   ) : (
@@ -1941,7 +2046,7 @@ export default function Page() {
         <div className="fixed left-0 right-0 bottom-0 z-40 px-4 md:px-6 pb-4">
           {settingsOpenMobile && (
             <div className="absolute left-4 md:left-6 right-4 md:right-6 bottom-[84px] z-50 pointer-events-none">
-              <div ref={mobileSettingsRef} className={`${glass} rounded-[26px] px-5 pt-6 pb-5 pointer-events-auto`} style={{ maxHeight: 'calc(100svh - 210px)' }}>
+              <div ref={mobileSettingsRef} className={`${glass} rounded-[26px] px-5 pt-6 pb-5 pointer-events-auto flex flex-col`} style={{ height: 'calc(100svh - 210px)', maxHeight: '500px' }}>
                 <div className="flex items-center justify-between mb-4">
                   <div className="text-sm font-bold text-black/70">Search</div>
                   <button
@@ -1949,10 +2054,10 @@ export default function Page() {
                       setSettingsOpenMobile(false);
                       setSearchOpenMobile(false);
                     }}
-                    className="w-9 h-9 rounded-full bg-black/10 grid place-items-center"
+                    className="w-8 h-8 rounded-full bg-white/50 flex items-center justify-center shadow-sm"
                     aria-label="Close"
                   >
-                    <span className="text-[20px] leading-none">×</span>
+                    <span className="text-[12px] leading-none pt-[1px]">✕</span>
                   </button>
                 </div>
 
@@ -2011,11 +2116,15 @@ export default function Page() {
               {scenario === 'saved' ? 'Saved ❤️' : topItem.label}
             </div>
 
-            {result && showResult && scenario !== 'saved' && (
+            {((result && showResult && scenario !== 'saved') || (scenario === 'saved' && activeSavedPhrase)) && (
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  speak();
+                  if (scenario === 'saved' && activeSavedPhrase) {
+                    speakText(activeSavedPhrase.text, lang);
+                  } else {
+                    speak();
+                  }
                 }}
                 className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/70 grid place-items-center transition-none active:scale-95"
                 aria-label="Voice"
@@ -2044,10 +2153,15 @@ export default function Page() {
             </button>
 
             <button
+              ref={mobileSearchBtnRef}
               onClick={(e) => {
                 e.stopPropagation();
-                setSettingsOpenMobile((v) => !v);
-                if (!settingsOpenMobile) setSearchOpenMobile(false);
+                if (settingsOpenMobile) {
+                  setSettingsOpenMobile(false);
+                  setSearchOpenMobile(false);
+                } else {
+                  setSettingsOpenMobile(true);
+                }
               }}
               className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/70 grid place-items-center transition-none"
               aria-label="Search situations"
