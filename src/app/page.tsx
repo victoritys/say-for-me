@@ -29,7 +29,7 @@ interface PhraseEntry {
   translations: {
     RU: string;
     SR?: string;
-    CHI?: string;
+    ES?: string;
   };
   // Smart Filters
   // 'casual' | 'polite' | 'formal' | 'urgent' | 'friendly' | 'direct'
@@ -43,69 +43,69 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'delivery-1',
       text: 'I’m on my way down right now.',
-      translations: { RU: 'Я уже спускаюсь.', SR: 'Silazim odmah.', CHI: '我现在就下来。' },
+      translations: { RU: 'Я уже спускаюсь.', SR: 'Silazim odmah.', ES: 'Estoy bajando ahora mismo.' },
       tags: ['urgent', 'direct'],
     },
     {
       id: 'delivery-2',
       text: 'I’ll be there in just a moment.',
-      translations: { RU: 'Я буду там через минуту.', SR: 'Biću tamo za trenutak.', CHI: '我马上就到。' },
+      translations: { RU: 'Я буду там через минуту.', SR: 'Biću tamo za trenutak.', ES: 'Estaré allí en un momento.' },
       tags: ['polite', 'urgent'],
     },
     {
       id: 'delivery-3',
       text: 'I’m coming downstairs, please hold on.',
-      translations: { RU: 'Я спускаюсь, пожалуйста, подождите.', SR: 'Silazim, sačekajte molim vas.', CHI: '我正下楼，请稍等。' },
+      translations: { RU: 'Я спускаюсь, пожалуйста, подождите.', SR: 'Silazim, sačekajte molim vas.', ES: 'Estoy bajando, por favor espere.' },
       tags: ['polite', 'urgent'],
     },
     {
       id: 'delivery-4',
       text: 'I’ll meet you at the entrance in a minute.',
-      translations: { RU: 'Я встречу вас у входа через минуту.', SR: 'Naći ćemo se na ulazu za minut.', CHI: '我一分钟后在入口见你。' },
+      translations: { RU: 'Я встречу вас у входа через минуту.', SR: 'Naći ćemo se na ulazu za minut.', ES: 'Te veo en la entrada en un minuto.' },
       tags: ['direct'],
       context: 'When courier is outside'
     },
     {
       id: 'delivery-5',
       text: 'Give me a second, I’m heading out.',
-      translations: { RU: 'Секундочку, я выхожу.', SR: 'Samo sekund, izlazim.', CHI: '稍等，我这就出来。' },
+      translations: { RU: 'Секундочку, я выхожу.', SR: 'Samo sekund, izlazim.', ES: 'Dame un segundo, estoy saliendo.' },
       tags: ['casual', 'urgent'],
     },
     {
       id: 'delivery-6',
       text: 'I’m stepping out now, see you shortly.',
-      translations: { RU: 'Я уже выхожу, скоро буду.', SR: 'Izlazim sada, vidimo se uskoro.', CHI: '我现在出来，一会儿见。' },
+      translations: { RU: 'Я уже выхожу, скоро буду.', SR: 'Izlazim sada, vidimo se uskoro.', ES: 'Estoy saliendo ahora, nos vemos pronto.' },
       tags: ['polite'],
     },
     {
       id: 'delivery-7',
       text: 'I’ll be with you shortly, thank you for waiting.',
-      translations: { RU: 'Я сейчас подойду, спасибо за ожидание.', SR: 'Brzo ću doći, hvala na čekanju.', CHI: '我很快就到，谢谢等待。' },
+      translations: { RU: 'Я сейчас подойду, спасибо за ожидание.', SR: 'Brzo ću doći, hvala na čekanju.', ES: 'Estaré contigo en breve, gracias por esperar.' },
       tags: ['formal', 'polite'],
       context: 'If you are late'
     },
     {
       id: 'delivery-8',
       text: 'I’m leaving my apartment now.',
-      translations: { RU: 'Я выхожу из квартиры.', SR: 'Upravo izlazim iz stana.', CHI: '我现在离开公寓。' },
+      translations: { RU: 'Я выхожу из квартиры.', SR: 'Upravo izlazim iz stana.', ES: 'Estoy saliendo de mi apartamento ahora.' },
       tags: ['direct'],
     },
     {
       id: 'delivery-9',
       text: 'I’m heading to the door as we speak.',
-      translations: { RU: 'Я уже иду к двери.', SR: 'Krenuo/la sam ka vratima.', CHI: '我正走向门口。' },
+      translations: { RU: 'Я уже иду к двери.', SR: 'Krenuo/la sam ka vratima.', ES: 'Estoy yendo hacia la puerta en este momento.' },
       tags: ['urgent', 'casual'],
     },
     {
       id: 'delivery-10',
       text: 'I’m on my way.',
-      translations: { RU: 'Я уже иду / Я в пути / Я выхожу.', SR: 'Na putu sam.', CHI: '我在路上了。' },
+      translations: { RU: 'Я уже иду / Я в пути / Я выхожу.', SR: 'Na putu sam.', ES: 'Voy en camino.' },
       tags: ['casual', 'direct'],
     },
     {
       id: 'delivery-11',
       text: 'I’ll be right there.',
-      translations: { RU: 'Я сейчас подойду / Я уже почти там / Сейчас буду.', SR: 'Odmah stižem.', CHI: '我马上到。' },
+      translations: { RU: 'Я сейчас подойду / Я уже почти там / Сейчас буду.', SR: 'Odmah stižem.', ES: 'Estaré allí enseguida.' },
       tags: ['casual', 'urgent'],
     },
   ],
@@ -113,52 +113,52 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'ordering-1',
       text: 'Hey, can I get a menu?',
-      translations: { RU: 'Привет, можно меню?', SR: 'Hej, mogu li dobiti meni?', CHI: '嘿，可以给我菜单吗？' },
+      translations: { RU: 'Привет, можно меню?', SR: 'Hej, mogu li dobiti meni?', ES: 'Hola, ¿puedo ver el menú?' },
       tags: ['casual'],
       context: 'When you sit down'
     },
     {
       id: 'ordering-2',
       text: 'Yeah, I’m ready to order.',
-      translations: { RU: 'Да, я готов(а) заказать.', SR: 'Da, spreman/na sam da naručim.', CHI: '是的，我准备好点餐了。' },
+      translations: { RU: 'Да, я готов(а) заказать.', SR: 'Da, spreman/na sam da naručim.', ES: 'Sí, estoy listo para pedir.' },
       tags: ['direct'],
     },
     {
       id: 'ordering-3',
       text: 'What’s good here?',
-      translations: { RU: 'Что у вас тут вкусного?', SR: 'Šta je ovde dobro?', CHI: '这也什么好吃？' },
+      translations: { RU: 'Что у вас тут вкусного?', SR: 'Šta je ovde dobro?', ES: '¿Qué es bueno aquí?' },
       tags: ['casual', 'friendly'],
     },
     {
       id: 'ordering-4',
       text: 'Can I get this to take away?',
-      translations: { RU: 'Можно с собой?', SR: 'Mogu li dobiti ovo za poneti?', CHI: '这个可以打包吗？' },
+      translations: { RU: 'Можно с собой?', SR: 'Mogu li dobiti ovo za poneti?', ES: '¿Puedo pedir esto para llevar?' },
       tags: ['direct'],
     },
     {
       id: 'ordering-5',
       text: 'Could we get the check?',
-      translations: { RU: 'Можно счёт?', SR: 'Možemo li dobiti račun?', CHI: '买单。' },
+      translations: { RU: 'Можно счёт?', SR: 'Možemo li dobiti račun?', ES: '¿Nos trae la cuenta, por favor?' },
       tags: ['polite'],
       context: 'After meal'
     },
     {
       id: 'ordering-6',
       text: 'Everything was awesome, thanks!',
-      translations: { RU: 'Всё было супер, спасибо!', SR: 'Sve je bilo super, hvala!', CHI: '一切都很棒，谢谢！' },
+      translations: { RU: 'Всё было супер, спасибо!', SR: 'Sve je bilo super, hvala!', ES: '¡Todo estuvo increíble, gracias!' },
       tags: ['friendly', 'polite'],
     },
     {
       id: 'ordering-7',
       text: 'Let me get + dish',
-      translations: { RU: 'Можно мне (блюдо)', SR: 'Mogu li dobiti (jelo)', CHI: '我要一份（菜名）' },
+      translations: { RU: 'Можно мне (блюдо)', SR: 'Mogu li dobiti (jelo)', ES: 'Me gustaría (plato)' },
       tags: ['casual'],
       context: 'Template'
     },
     {
       id: 'ordering-8',
       text: 'Let me get the pasta, no cheese please.',
-      translations: { RU: 'Можно мне пасту без сыра, пожалуйста.', SR: 'Mogu li dobiti pastu, bez sira molim.', CHI: '请给我一份意面，不要芝士。' },
+      translations: { RU: 'Можно мне пасту без сыра, пожалуйста.', SR: 'Mogu li dobiti pastu, bez sira molim.', ES: 'Me gustaría la pasta, sin queso por favor.' },
       tags: ['polite', 'direct'],
     },
   ],
@@ -166,33 +166,33 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'hotel-1',
       text: 'Hi, I’m here to check in.',
-      translations: { RU: 'Привет, я на заселение.', SR: 'Zdravo, došao sam da se prijavim.', CHI: '你好，我来办理入住。' },
+      translations: { RU: 'Привет, я на заселение.', SR: 'Zdravo, došao sam da se prijavim.', ES: 'Hola, vengo a hacer el check-in.' },
       tags: ['direct'],
       context: 'At reception'
     },
     {
       id: 'hotel-2',
       text: 'I have a reservation under [Name].',
-      translations: { RU: 'У меня бронь на имя [Имя].', SR: 'Imam rezervaciju na ime [Ime].', CHI: '我预订了房间，名字是 [名字]。' },
+      translations: { RU: 'У меня бронь на имя [Имя].', SR: 'Imam rezervaciju na ime [Ime].', ES: 'Tengo una reserva a nombre de [Nombre].' },
       tags: ['direct'],
       context: 'Template'
     },
     {
       id: 'hotel-3',
       text: 'I just arrived — is my room ready?',
-      translations: { RU: 'Я только приехал(а), номер уже готов?', SR: 'Upravo sam stigao — da li je moja soba spremna?', CHI: '我刚到，请问我的房间准备好了吗？' },
+      translations: { RU: 'Я только приехал(а), номер уже готов?', SR: 'Upravo sam stigao — da li je moja soba spremna?', ES: 'Acabo de llegar, ¿está lista mi habitación?' },
       tags: ['polite', 'urgent'],
     },
     {
       id: 'hotel-4',
       text: 'Can I get a room with a view/balcony?',
-      translations: { RU: 'Можно номер с видом / балконом?', SR: 'Mogu li dobiti sobu sa pogledom / balkonom?', CHI: '我可以要一间有风景/阳台的房间吗？' },
+      translations: { RU: 'Можно номер с видом / балконом?', SR: 'Mogu li dobiti sobu sa pogledom / balkonom?', ES: '¿Puedo tener una habitación con vista/balcón?' },
       tags: ['polite'],
     },
     {
       id: 'hotel-5',
       text: 'Is it possible to change the room?',
-      translations: { RU: 'Можно поменять номер?', SR: 'Da li je moguće promeniti sobu?', CHI: '请问可以换个房间吗？' },
+      translations: { RU: 'Можно поменять номер?', SR: 'Da li je moguće promeniti sobu?', ES: '¿Es posible cambiar de habitación?' },
       tags: ['polite', 'urgent'],
       context: 'If there is an issue'
     },
@@ -201,55 +201,55 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'store-1',
       text: 'Hi there, could you help me find this in another size?',
-      translations: { RU: 'Здравствуйте, поможете найти это в другом размере?', SR: 'Zdravo, možete li mi pomoći da nađem ovo u drugoj veličini?', CHI: '你好，能帮我找一下这个的别的尺码吗？' },
+      translations: { RU: 'Здравствуйте, поможете найти это в другом размере?', SR: 'Zdravo, možete li mi pomoći da nađem ovo u drugoj veličini?', ES: 'Hola, ¿podrías ayudarme a encontrar esto en otra talla?' },
       tags: ['polite'],
     },
     {
       id: 'store-2',
       text: 'Hey, do you happen to have this in a different color?',
-      translations: { RU: 'Привет, случайно нет этого в другом цвете?', SR: 'Hej, da li slučajno imate ovo u drugoj boji?', CHI: '嘿，请问这个有别的颜色吗？' },
+      translations: { RU: 'Привет, случайно нет этого в другом цвете?', SR: 'Hej, da li slučajno imate ovo u drugoj boji?', ES: 'Hola, ¿tienes esto en otro color?' },
       tags: ['casual'],
     },
     {
       id: 'store-3',
       text: 'Hi, is there any chance you’ve got this in stock?',
-      translations: { RU: 'Здравствуйте, есть шанс, что это есть в наличии?', SR: 'Zdravo, da li možda imate ovo na stanju?', CHI: '你好，请问这个有现货吗？' },
+      translations: { RU: 'Здравствуйте, есть шанс, что это есть в наличии?', SR: 'Zdravo, da li možda imate ovo na stanju?', ES: 'Hola, ¿hay alguna posibilidad de que tengas esto en stock?' },
       tags: ['polite', 'urgent'],
     },
     {
       id: 'store-4',
       text: 'Hey there, I’m looking for something like this, but a bit bigger.',
-      translations: { RU: 'Привет, я ищу что-то похожее, но чуть больше.', SR: 'Hej, tražim nešto ovako, ali malo veće.', CHI: '嘿，我想找个像这样的，但是大一点的。' },
+      translations: { RU: 'Привет, я ищу что-то похожее, но чуть больше.', SR: 'Hej, tražim nešto ovako, ali malo veće.', ES: 'Hola, busco algo como esto, pero un poco más grande.' },
       tags: ['casual'],
     },
     {
       id: 'store-5',
       text: 'Hi, would you mind checking if you have this in medium?',
-      translations: { RU: 'Здравствуйте, не могли бы вы проверить, есть ли это в размере M?', SR: 'Zdravo, da li biste mogli proveriti da li imate ovo u M veličini?', CHI: '你好，介意帮我查一下这个有M号吗？' },
+      translations: { RU: 'Здравствуйте, не могли бы вы проверить, есть ли это в размере M?', SR: 'Zdravo, da li biste mogli proveriti da li imate ovo u M veličini?', ES: 'Hola, ¿te importaría comprobar si tienes esto en talla mediana?' },
       tags: ['polite'],
     },
     {
       id: 'store-6',
       text: 'Hey, do you know if this comes in other styles?',
-      translations: { RU: 'Привет, вы знаете, бывает ли это в других вариантах?', SR: 'Hej, znate li da li ovo dolazi u drugim verzijama?', CHI: '嘿，你知道这个还有别的款式吗？' },
+      translations: { RU: 'Привет, вы знаете, бывает ли это в других вариантах?', SR: 'Hej, znate li da li ovo dolazi u drugim verzijama?', ES: 'Hola, ¿sabes si esto viene en otros estilos?' },
       tags: ['casual'],
     },
     {
       id: 'store-7',
       text: 'Hi there, is this the only model you have?',
-      translations: { RU: 'Здравствуйте, это единственная модель, которая у вас есть?', SR: 'Zdravo, da li je ovo jedini model koji imate?', CHI: '你好，请问只有这一种型号吗？' },
+      translations: { RU: 'Здравствуйте, это единственная модель, которая у вас есть?', SR: 'Zdravo, da li je ovo jedini model koji imate?', ES: 'Hola, ¿este es el único modelo que tenéis?' },
       tags: ['direct'],
     },
     {
       id: 'store-8',
       text: 'Hey, could you show me something similar to this?',
-      translations: { RU: 'Привет, можете показать что-то похожее?', SR: 'Hej, možete li mi pokazati nešto slično ovome?', CHI: '嘿，能给我看下类似的东西吗？' },
+      translations: { RU: 'Привет, можете показать что-то похожее?', SR: 'Hej, možete li mi pokazati nešto slično ovome?', ES: 'Hola, ¿podrías mostrarme algo similar a esto?' },
       tags: ['friendly'],
     },
     {
       id: 'store-9',
       text: 'Hey there, what would you recommend instead?',
-      translations: { RU: 'Привет, что бы вы посоветовали вместо этого?', SR: 'Hej, šta biste preporučili umesto toga?', CHI: '嘿，如果不买这个，你有什么推荐的吗？' },
+      translations: { RU: 'Привет, что бы вы посоветовали вместо этого?', SR: 'Hej, šta biste preporučili umesto toga?', ES: 'Hola, ¿qué me recomendarías en su lugar?' },
       tags: ['friendly', 'casual'],
     },
   ],
@@ -257,61 +257,61 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'greeting-1',
       text: 'Hey, how’s it going?',
-      translations: { RU: 'Привет, как дела?', SR: 'Ćao, kako ide?', CHI: '嘿，最近怎么样？' },
+      translations: { RU: 'Привет, как дела?', SR: 'Ćao, kako ide?', ES: 'Hola, ¿qué tal?' },
       tags: ['casual', 'friendly'],
     },
     {
       id: 'greeting-2',
       text: 'Hi there, nice to see you.',
-      translations: { RU: 'Привет, рад(а) тебя видеть.', SR: 'Zdravo, drago mi je što te vidim.', CHI: '你好，很高兴见到你。' },
+      translations: { RU: 'Привет, рад(а) тебя видеть.', SR: 'Zdravo, drago mi je što te vidim.', ES: 'Hola, me alegro de verte.' },
       tags: ['polite', 'friendly'],
     },
     {
       id: 'greeting-3',
       text: 'Hey, what’s up?',
-      translations: { RU: 'Привет, как оно?', SR: 'Hej, šta ima?', CHI: '嘿，有什么新鲜事？' },
+      translations: { RU: 'Привет, как оно?', SR: 'Hej, šta ima?', ES: 'Hola, ¿qué pasa?' },
       tags: ['casual'],
     },
     {
       id: 'greeting-4',
       text: 'Hi, how are you doing today?',
-      translations: { RU: 'Привет, как ты сегодня?', SR: 'Zdravo, kako si danas?', CHI: '你好，你今天过得怎么样？' },
+      translations: { RU: 'Привет, как ты сегодня?', SR: 'Zdravo, kako si danas?', ES: 'Hola, ¿cómo estás hoy?' },
       tags: ['polite'],
     },
     {
       id: 'greeting-5',
       text: 'Hey there, good to see you.',
-      translations: { RU: 'Привет, рад(а) видеть.', SR: 'Hej, lepo te je videti.', CHI: '嘿，很高兴见到你。' },
+      translations: { RU: 'Привет, рад(а) видеть.', SR: 'Hej, lepo te je videti.', ES: 'Hola, qué bueno verte.' },
       tags: ['friendly'],
     },
     {
       id: 'greeting-6',
       text: 'Hi, hope you’re doing well.',
-      translations: { RU: 'Привет, надеюсь, у тебя всё хорошо.', SR: 'Zdravo, nadam se da si dobro.', CHI: '你好，希望你一切都好。' },
+      translations: { RU: 'Привет, надеюсь, у тебя всё хорошо.', SR: 'Zdravo, nadam se da si dobro.', ES: 'Hola, espero que estés bien.' },
       tags: ['polite', 'friendly'],
     },
     {
       id: 'greeting-7',
       text: 'Hey, how’ve you been?',
-      translations: { RU: 'Привет, как ты поживаешь?', SR: 'Hej, kako si u poslednje vreme?', CHI: '嘿，最近过得怎么样？' },
+      translations: { RU: 'Привет, как ты поживаешь?', SR: 'Hej, kako si u poslednje vreme?', ES: 'Hola, ¿cómo has estado?' },
       tags: ['casual', 'friendly'],
     },
     {
       id: 'greeting-8',
       text: 'Hi there, everything good?',
-      translations: { RU: 'Привет, всё ок?', SR: 'Zdravo, je l\' sve u redu?', CHI: '你好，一切顺利吗？' },
+      translations: { RU: 'Привет, всё ок?', SR: 'Zdravo, je l\' sve u redu?', ES: 'Hola, ¿todo bien?' },
       tags: ['casual'],
     },
     {
       id: 'greeting-9',
       text: 'Hey, long time no see.',
-      translations: { RU: 'Привет, давно не виделись.', SR: 'Hej, dugo se nismo videli.', CHI: '嘿，好久不见。' },
+      translations: { RU: 'Привет, давно не виделись.', SR: 'Hej, dugo se nismo videli.', ES: 'Hola, cuánto tiempo sin verte.' },
       tags: ['casual', 'friendly'],
     },
     {
       id: 'greeting-10',
       text: 'Hi, how’s everything?',
-      translations: { RU: 'Привет, как всё?', SR: 'Zdravo, kako je sve?', CHI: '你好，一切都好吗？' },
+      translations: { RU: 'Привет, как всё?', SR: 'Zdravo, kako je sve?', ES: 'Hola, ¿qué tal todo?' },
       tags: ['casual'],
     },
   ],
@@ -319,62 +319,62 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'how-are-you-1',
       text: 'Hey, how’s it going?',
-      translations: { RU: 'Привет, как дела?', SR: 'Ćao, kako ide?', CHI: '嘿，最近怎么样？' },
+      translations: { RU: 'Привет, как дела?', SR: 'Ćao, kako ide?', ES: 'Hola, ¿cómo te va?' },
       tags: ['casual'],
     },
     {
       id: 'how-are-you-2',
       text: 'How are things?',
-      translations: { RU: 'Как у тебя дела?', SR: 'Kako stvari stoje?', CHI: '最近怎么样？' },
+      translations: { RU: 'Как у тебя дела?', SR: 'Kako stvari stoje?', ES: '¿Cómo van las cosas?' },
       tags: ['casual'],
     },
     {
       id: 'how-are-you-3',
       text: 'How have you been?',
-      translations: { RU: 'Как ты поживал(а)?', SR: 'Kako si bio?', CHI: '你最近过得怎么样？' },
+      translations: { RU: 'Как ты поживал(а)?', SR: 'Kako si bio?', ES: '¿Cómo has estado?' },
       tags: ['polite', 'friendly'],
     },
     {
       id: 'how-are-you-4',
       text: 'How’s everything?',
-      translations: { RU: 'Как всё?', SR: 'Kako je sve?', CHI: '一切都好吗？' },
+      translations: { RU: 'Как всё?', SR: 'Kako je sve?', ES: '¿Qué tal todo?' },
       tags: ['casual'],
     },
     {
       id: 'how-are-you-5',
       text: 'What’s new with you?',
-      translations: { RU: 'Что нового?', SR: 'Šta ima novo kod tebe?', CHI: '你有什么确切的新鲜事吗？' },
+      translations: { RU: 'Что нового?', SR: 'Šta ima novo kod tebe?', ES: '¿Qué hay de nuevo?' },
       tags: ['friendly'],
     },
     {
       id: 'how-are-you-6',
       text: 'How’s life treating you?',
-      translations: { RU: 'Как жизнь?', SR: 'Kako te život tretira?', CHI: '最近生活怎么样？' },
+      translations: { RU: 'Как жизнь?', SR: 'Kako te život tretira?', ES: '¿Cómo te trata la vida?' },
       tags: ['casual', 'friendly'],
     },
     {
       id: 'how-are-you-7',
       text: 'You doing okay?',
-      translations: { RU: 'Всё нормально?', SR: 'Da li si dobro?', CHI: '你还好吗？' },
+      translations: { RU: 'Всё нормально?', SR: 'Da li si dobro?', ES: '¿Estás bien?' },
       tags: ['casual', 'direct'],
     },
     {
       id: 'how-are-you-8',
       text: 'How are you holding up?',
-      translations: { RU: 'Как ты держишься?', SR: 'Kako se držiš?', CHI: '你还能撑得住吗？' },
+      translations: { RU: 'Как ты держишься?', SR: 'Kako se držiš?', ES: '¿Cómo lo llevas?' },
       tags: ['friendly', 'urgent'],
       context: 'If they had a hard time'
     },
     {
       id: 'how-are-you-9',
       text: 'Everything good on your end?',
-      translations: { RU: 'У тебя всё хорошо?', SR: 'Je l\' sve u redu kod tebe?', CHI: '你那边一切都好吗？' },
+      translations: { RU: 'У тебя всё хорошо?', SR: 'Je l\' sve u redu kod tebe?', ES: '¿Todo bien por tu parte?' },
       tags: ['casual'],
     },
     {
       id: 'how-are-you-10',
       text: 'How are you feeling these days?',
-      translations: { RU: 'Как ты себя сейчас чувствуешь?', SR: 'Kako se osećaš ovih dana?', CHI: '这几天感觉怎么样？' },
+      translations: { RU: 'Как ты себя сейчас чувствуешь?', SR: 'Kako se osećaš ovih dana?', ES: '¿Cómo te sientes estos días?' },
       tags: ['polite', 'friendly'],
     },
   ],
@@ -382,62 +382,62 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'answering-how-are-you-1',
       text: 'I’m doing great, thanks.',
-      translations: { RU: 'У меня всё отлично, спасибо.', SR: 'Odlično sam, hvala.', CHI: '我很好，谢谢。' },
+      translations: { RU: 'У меня всё отлично, спасибо.', SR: 'Odlično sam, hvala.', ES: 'Estoy genial, gracias.' },
       tags: ['positive', 'polite'],
     },
     {
       id: 'answering-how-are-you-2',
       text: 'Pretty good, actually.',
-      translations: { RU: 'На самом деле, довольно хорошо.', SR: 'Prilično dobro, zapravo.', CHI: '其实还不错。' },
+      translations: { RU: 'На самом деле, довольно хорошо.', SR: 'Prilično dobro, zapravo.', ES: 'Bastante bien, la verdad.' },
       tags: ['positive', 'casual'],
     },
     {
       id: 'answering-how-are-you-3',
       text: 'Can’t complain.',
-      translations: { RU: 'Не жалуюсь.', SR: 'Ne mogu da se žalim.', CHI: '没什么可抱怨的。' },
+      translations: { RU: 'Не жалуюсь.', SR: 'Ne mogu da se žalim.', ES: 'No me puedo quejar.' },
       tags: ['casual'],
     },
     {
       id: 'answering-how-are-you-4',
       text: 'All good on my side.',
-      translations: { RU: 'У меня всё ок.', SR: 'Kod mene je sve dobro.', CHI: '我这边一切都好。' },
+      translations: { RU: 'У меня всё ок.', SR: 'Kod mene je sve dobro.', ES: 'Todo bien por aquí.' },
       tags: ['casual'],
     },
     {
       id: 'answering-how-are-you-5',
       text: 'Doing well, thanks for asking.',
-      translations: { RU: 'Всё хорошо, спасибо, что спросил(а).', SR: 'Dobro sam, hvala na pitanju.', CHI: '一切顺利，谢谢关心。' },
+      translations: { RU: 'Всё хорошо, спасибо, что спросил(а).', SR: 'Dobro sam, hvala na pitanju.', ES: 'Bien, gracias por preguntar.' },
       tags: ['polite'],
     },
     {
       id: 'answering-how-are-you-6',
       text: 'I’m good, just busy.',
-      translations: { RU: 'Всё нормально, просто занят(а).', SR: 'Dobro sam, samo sam zauzet.', CHI: '我还好，就是有点忙。' },
+      translations: { RU: 'Всё нормально, просто занят(а).', SR: 'Dobro sam, samo sam zauzet.', ES: 'Estoy bien, solo ocupado.' },
       tags: ['casual'],
       context: 'If you want to end conversation'
     },
     {
       id: 'answering-how-are-you-7',
       text: 'Feeling great today.',
-      translations: { RU: 'Сегодня отлично себя чувствую.', SR: 'Osećam se odlično danas.', CHI: '今天感觉很棒。' },
+      translations: { RU: 'Сегодня отлично себя чувствую.', SR: 'Osećam se odlično danas.', ES: 'Meiento genial hoy.' },
       tags: ['positive', 'friendly'],
     },
     {
       id: 'answering-how-are-you-8',
       text: 'Things are going well.',
-      translations: { RU: 'Всё идёт хорошо.', SR: 'Stvari idu dobro.', CHI: '一切都在往好的方向发展。' },
+      translations: { RU: 'Всё идёт хорошо.', SR: 'Stvari idu dobro.', ES: 'Las cosas van bien.' },
       tags: ['positive'],
     },
     {
       id: 'answering-how-are-you-9',
       text: 'Not bad at all.',
-      translations: { RU: 'Вполне нормально.', SR: 'Nije loše uopšte.', CHI: '一点也不差。' },
+      translations: { RU: 'Вполне нормально.', SR: 'Nije loše uopšte.', ES: 'Nada mal.' },
       tags: ['casual'],
     },
     {
       id: 'answering-how-are-you-10',
       text: 'Better than ever.',
-      translations: { RU: 'Лучше, чем когда-либо.', SR: 'Bolje nego ikad.', CHI: '前所未有的好。' },
+      translations: { RU: 'Лучше, чем когда-либо.', SR: 'Bolje nego ikad.', ES: 'Mejor que nunca.' },
       tags: ['positive', 'friendly'],
     },
   ],
@@ -445,61 +445,61 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'saying-goodbye-1',
       text: 'Alright, see you later.',
-      translations: { RU: 'Ладно, увидимся.', SR: 'Važi, vidimo se kasnije.', CHI: '好的，回头见。' },
+      translations: { RU: 'Ладно, увидимся.', SR: 'Važi, vidimo se kasnije.', ES: 'Venga, hasta luego.' },
       tags: ['casual'],
     },
     {
       id: 'saying-goodbye-2',
       text: 'I’d better get going.',
-      translations: { RU: 'Мне пора идти.', SR: 'Bolje da krenem.', CHI: '我得走了。' },
+      translations: { RU: 'Мне пора идти.', SR: 'Bolje da krenem.', ES: 'Mejor me voy yendo.' },
       tags: ['casual', 'direct'],
     },
     {
       id: 'saying-goodbye-3',
       text: 'It was nice talking to you.',
-      translations: { RU: 'Было приятно пообщаться.', SR: 'Bilo je lepo razgovarati s tobom.', CHI: '很高兴和你聊天。' },
+      translations: { RU: 'Было приятно пообщаться.', SR: 'Bilo je lepo razgovarati s tobom.', ES: 'Fue agradable hablar contigo.' },
       tags: ['polite', 'friendly'],
     },
     {
       id: 'saying-goodbye-4',
       text: 'Catch you later.',
-      translations: { RU: 'Увидимся позже.', SR: 'Vidimo se kasnije.', CHI: '回头见。' },
+      translations: { RU: 'Увидимся позже.', SR: 'Vidimo se kasnije.', ES: 'Te veo luego.' },
       tags: ['casual'],
     },
     {
       id: 'saying-goodbye-5',
       text: 'Take care.',
-      translations: { RU: 'Береги себя.', SR: 'Čuvaj se.', CHI: '保重。' },
+      translations: { RU: 'Береги себя.', SR: 'Čuvaj se.', ES: 'Cuídate.' },
       tags: ['friendly'],
     },
     {
       id: 'saying-goodbye-6',
       text: 'Talk to you soon.',
-      translations: { RU: 'Скоро созвонимся.', SR: 'Čujemo se uskoro.', CHI: '再聊。' },
+      translations: { RU: 'Скоро созвонимся.', SR: 'Čujemo se uskoro.', ES: 'Hablamos pronto.' },
       tags: ['friendly'],
     },
     {
       id: 'saying-goodbye-7',
       text: 'Have a good one.',
-      translations: { RU: 'Хорошего дня.', SR: 'Prijatan dan.', CHI: '祝你过得愉快。' },
+      translations: { RU: 'Хорошего дня.', SR: 'Prijatan dan.', ES: 'Que tengas un buen día.' },
       tags: ['casual', 'friendly'],
     },
     {
       id: 'saying-goodbye-8',
       text: 'Let’s stay in touch.',
-      translations: { RU: 'Давай будем на связи.', SR: 'Ostanimo u kontaktu.', CHI: '保持联系。' },
+      translations: { RU: 'Давай будем на связи.', SR: 'Ostanimo u kontaktu.', ES: 'Sigamos en contacto.' },
       tags: ['friendly'],
     },
     {
       id: 'saying-goodbye-9',
       text: 'See you around.',
-      translations: { RU: 'Ещё увидимся.', SR: 'Vidimo se.', CHI: '回见。' },
+      translations: { RU: 'Ещё увидимся.', SR: 'Vidimo se.', ES: 'Nos vemos.' },
       tags: ['casual'],
     },
     {
       id: 'saying-goodbye-10',
       text: 'Enjoy the rest of your day.',
-      translations: { RU: 'Хорошего остатка дня.', SR: 'Uživaj u ostatku dana.', CHI: '祝你今天过得愉快。' },
+      translations: { RU: 'Хорошего остатка дня.', SR: 'Uživaj u ostatku dana.', ES: 'Disfruta el resto de tu día.' },
       tags: ['polite', 'friendly'],
     },
   ],
@@ -507,61 +507,61 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'making-friends-1',
       text: 'So, where are you from?',
-      translations: { RU: 'Ты откуда?', SR: 'Odakle si?', CHI: '你是哪里人？' },
+      translations: { RU: 'Ты откуда?', SR: 'Odakle si?', ES: 'Entonces, ¿de dónde eres?' },
       tags: ['casual', 'friendly'],
     },
     {
       id: 'making-friends-2',
       text: 'How long have you been here?',
-      translations: { RU: 'Как давно ты здесь?', SR: 'Koliko dugo si ovde?', CHI: '你在这里多久了？' },
+      translations: { RU: 'Как давно ты здесь?', SR: 'Koliko dugo si ovde?', ES: '¿Cuánto tiempo llevas aquí?' },
       tags: ['casual'],
     },
     {
       id: 'making-friends-3',
       text: 'What do you do?',
-      translations: { RU: 'Чем ты занимаешься?', SR: 'Čime se baviš?', CHI: '你是做什么的？' },
+      translations: { RU: 'Чем ты занимаешься?', SR: 'Čime se baviš?', ES: '¿A qué te dedicas?' },
       tags: ['casual'],
     },
     {
       id: 'making-friends-4',
       text: 'Is this your first time here?',
-      translations: { RU: 'Ты здесь впервые?', SR: 'Da li si prvi put ovde?', CHI: '你是第一次来这里吗？' },
+      translations: { RU: 'Ты здесь впервые?', SR: 'Da li si prvi put ovde?', ES: '¿Es tu primera vez aquí?' },
       tags: ['casual'],
     },
     {
       id: 'making-friends-5',
       text: 'Do you live around here?',
-      translations: { RU: 'Ты тут живёшь рядом?', SR: 'Da li živiš u blizini?', CHI: '你住在这附近吗？' },
+      translations: { RU: 'Ты тут живёшь рядом?', SR: 'Da li živiš u blizini?', ES: '¿Vives por aquí?' },
       tags: ['casual'],
     },
     {
       id: 'making-friends-6',
       text: 'What brought you here?',
-      translations: { RU: 'Что тебя сюда привело?', SR: 'Šta te je dovelo ovde?', CHI: '什么风把你吹来了？' },
+      translations: { RU: 'Что тебя сюда привело?', SR: 'Šta te je dovelo ovde?', ES: '¿Qué te trajo aquí?' },
       tags: ['friendly'],
     },
     {
       id: 'making-friends-7',
       text: 'Are you new to the city too?',
-      translations: { RU: 'Ты тоже недавно в городе?', SR: 'Da li si i ti nov u gradu?', CHI: '你也是刚来这个城市吗？' },
+      translations: { RU: 'Ты тоже недавно в городе?', SR: 'Da li si i ti nov u gradu?', ES: '¿También eres nuevo en la ciudad?' },
       tags: ['friendly'],
     },
     {
       id: 'making-friends-8',
       text: 'Do you like it here so far?',
-      translations: { RU: 'Тебе тут нравится?', SR: 'Da li ti se sviđa ovde do sada?', CHI: '到目前为止你喜欢这里吗？' },
+      translations: { RU: 'Тебе тут нравится?', SR: 'Da li ti se sviđa ovde do sada?', ES: '¿Te gusta esto por ahora?' },
       tags: ['casual', 'friendly'],
     },
     {
       id: 'making-friends-9',
       text: 'Have you been here long?',
-      translations: { RU: 'Ты давно здесь?', SR: 'Da li si dugo ovde?', CHI: '你待在这里很久了吗？' },
+      translations: { RU: 'Ты давно здесь?', SR: 'Da li si dugo ovde?', ES: '¿Llevas mucho tiempo aquí?' },
       tags: ['casual'],
     },
     {
       id: 'making-friends-10',
       text: 'What do you usually do in your free time?',
-      translations: { RU: 'Чем ты обычно занимаешься в свободное время?', SR: 'Šta obično radiš u slobodno vreme?', CHI: '你空闲时间通常做什么？' },
+      translations: { RU: 'Чем ты обычно занимаешься в свободное время?', SR: 'Šta obično radiš u slobodno vreme?', ES: '¿Qué sueles hacer en tu tiempo libre?' },
       tags: ['friendly'],
     },
   ],
@@ -569,61 +569,61 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'asking-for-help-1',
       text: 'Could you help me out for a second?',
-      translations: { RU: 'Можешь помочь на секундочку?', SR: 'Možeš li mi pomoći na sekundu?', CHI: '能帮我一下吗？' },
+      translations: { RU: 'Можешь помочь на секундочку?', SR: 'Možeš li mi pomoći na sekundu?', ES: '¿Podrías ayudarme un segundo?' },
       tags: ['casual', 'polite'],
     },
     {
       id: 'asking-for-help-2',
       text: 'Hey, could I ask you something?',
-      translations: { RU: 'Привет, можно тебя кое-что спросить?', SR: 'Hej, mogu li te nešto pitati?', CHI: '嘿，我可以问你点事吗？' },
+      translations: { RU: 'Привет, можно тебя кое-что спросить?', SR: 'Hej, mogu li te nešto pitati?', ES: 'Hola, ¿puedo preguntarte algo?' },
       tags: ['casual'],
     },
     {
       id: 'asking-for-help-3',
       text: 'Sorry to bother you, but I need some help.',
-      translations: { RU: 'Извини, что отвлекаю, но мне нужна помощь.', SR: 'Izvini što smetam, ali treba mi pomoć.', CHI: '抱歉打扰你，但我需要帮助。' },
+      translations: { RU: 'Извини, что отвлекаю, но мне нужна помощь.', SR: 'Izvini što smetam, ali treba mi pomoć.', ES: 'Perdona que te moleste, pero necesito ayuda.' },
       tags: ['polite', 'urgent'],
     },
     {
       id: 'asking-for-help-4',
       text: 'Would you mind giving me a hand?',
-      translations: { RU: 'Не мог(ла) бы ты помочь?', SR: 'Da li bi mogao/la da mi pomogneš?', CHI: '介意帮把手吗？' },
+      translations: { RU: 'Не мог(ла) бы ты помочь?', SR: 'Da li bi mogao/la da mi pomogneš?', ES: '¿Te importaría echarme una mano?' },
       tags: ['polite'],
     },
     {
       id: 'asking-for-help-5',
       text: 'I’m a bit lost — could you help me?',
-      translations: { RU: 'Я немного потерялся(ась), поможешь?', SR: 'Malo sam se izgubio/la — možeš li mi pomoći?', CHI: '我有点迷路了——能帮帮我吗？' },
+      translations: { RU: 'Я немного потерялся(ась), поможешь?', SR: 'Malo sam se izgubio/la — možeš li mi pomoći?', ES: 'Estoy un poco perdido, ¿podrías ayudarme?' },
       tags: ['polite', 'urgent'],
     },
     {
       id: 'asking-for-help-6',
       text: 'Can you help me figure this out?',
-      translations: { RU: 'Поможешь мне с этим разобраться?', SR: 'Možeš li mi pomoći da ovo rešim?', CHI: '能帮我弄明白这个吗？' },
+      translations: { RU: 'Поможешь мне с этим разобраться?', SR: 'Možeš li mi pomoći da ovo rešim?', ES: '¿Puedes ayudarme a resolver esto?' },
       tags: ['casual'],
     },
     {
       id: 'asking-for-help-7',
       text: 'I could really use some help here.',
-      translations: { RU: 'Мне бы тут очень пригодилась помощь.', SR: 'Stvarno bi mi dobro došla pomoć ovde.', CHI: '我这里真的需要一些帮助。' },
+      translations: { RU: 'Мне бы тут очень пригодилась помощь.', SR: 'Stvarno bi mi dobro došla pomoć ovde.', ES: 'Realmente me vendría bien un poco de ayuda.' },
       tags: ['direct', 'urgent'],
     },
     {
       id: 'asking-for-help-8',
       text: 'Any chance you could help me?',
-      translations: { RU: 'Есть шанс, что ты мне поможешь?', SR: 'Ima li šanse da mi pomogneš?', CHI: '有机会帮我一下吗？' },
+      translations: { RU: 'Есть шанс, что ты мне поможешь?', SR: 'Ima li šanse da mi pomogneš?', ES: '¿Hay alguna posibilidad de que me ayudes?' },
       tags: ['casual', 'polite'],
     },
     {
       id: 'asking-for-help-9',
       text: 'Do you have a minute to help me?',
-      translations: { RU: 'У тебя есть минутка помочь?', SR: 'Imaš li minut da mi pomogneš?', CHI: '有时间帮我一下吗？' },
+      translations: { RU: 'У тебя есть минутка помочь?', SR: 'Imaš li minut da mi pomogneš?', ES: '¿Tienes un minuto para ayudarme?' },
       tags: ['polite'],
     },
     {
       id: 'asking-for-help-10',
       text: 'I’m not sure what to do — can you help?',
-      translations: { RU: 'Я не уверен(а), что делать — поможешь?', SR: 'Nisam siguran/na šta da radim — možeš li pomoći?', CHI: '我不确定该怎么做——能帮帮我吗？' },
+      translations: { RU: 'Я не уверен(а), что делать — поможешь?', SR: 'Nisam siguran/na šta da radim — možeš li pomoći?', ES: 'No estoy seguro de qué hacer, ¿puedes ayudarme?' },
       tags: ['polite', 'urgent'],
     },
   ],
@@ -631,61 +631,61 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'asking-for-directions-1',
       text: 'Excuse me, how do I get to this place?',
-      translations: { RU: 'Извините, как мне сюда пройти?', SR: 'Izvinite, kako da stignem do ovog mesta?', CHI: '打扰一下，请问怎么去这里？' },
+      translations: { RU: 'Извините, как мне сюда пройти?', SR: 'Izvinite, kako da stignem do ovog mesta?', ES: 'Disculpe, ¿cómo llego a este lugar?' },
       tags: ['polite'],
     },
     {
       id: 'asking-for-directions-2',
       text: 'Is this far from here?',
-      translations: { RU: 'Это далеко отсюда?', SR: 'Da li je ovo daleko odavde?', CHI: '这离这里远吗？' },
+      translations: { RU: 'Это далеко отсюда?', SR: 'Da li je ovo daleko odavde?', ES: '¿Está lejos de aquí?' },
       tags: ['direct'],
     },
     {
       id: 'asking-for-directions-3',
       text: 'Am I going the right way?',
-      translations: { RU: 'Я правильно иду?', SR: 'Da li idem pravim putem?', CHI: '我走的方向对吗？' },
+      translations: { RU: 'Я правильно иду?', SR: 'Da li idem pravim putem?', ES: '¿Voy por el camino correcto?' },
       tags: ['direct'],
     },
     {
       id: 'asking-for-directions-4',
       text: 'Could you point me in the right direction?',
-      translations: { RU: 'Не подскажете направление?', SR: 'Možete li mi pokazati pravi smer?', CHI: '你能给我指个方向吗？' },
+      translations: { RU: 'Не подскажете направление?', SR: 'Možete li mi pokazati pravi smer?', ES: '¿Podrías indicarme la dirección correcta?' },
       tags: ['polite'],
     },
     {
       id: 'asking-for-directions-5',
       text: 'Which way is the metro?',
-      translations: { RU: 'Где метро?', SR: 'Kuda se ide do metroa?', CHI: '地铁在哪边？' },
+      translations: { RU: 'Где метро?', SR: 'Kuda se ide do metroa?', ES: '¿Por dónde queda el metro?' },
       tags: ['direct'],
     },
     {
       id: 'asking-for-directions-6',
       text: 'How long does it take to walk there?',
-      translations: { RU: 'Сколько туда идти пешком?', SR: 'Koliko treba peške do tamo?', CHI: '走到那里要多久？' },
+      translations: { RU: 'Сколько туда идти пешком?', SR: 'Koliko treba peške do tamo?', ES: '¿Cuánto se tarda andando?' },
       tags: ['direct'],
     },
     {
       id: 'asking-for-directions-7',
       text: 'Is it easier to take a bus?',
-      translations: { RU: 'Проще поехать на автобусе?', SR: 'Da li je lakše ići autobusom?', CHI: '坐公交车会更方便吗？' },
+      translations: { RU: 'Проще поехать на автобусе?', SR: 'Da li je lakše ići autobusom?', ES: '¿Es más fácil ir en autobús?' },
       tags: ['direct'],
     },
     {
       id: 'asking-for-directions-8',
       text: 'Can I get there on foot?',
-      translations: { RU: 'Туда можно дойти пешком?', SR: 'Mogu li stići tamo peške?', CHI: '可以走路去吗？' },
+      translations: { RU: 'Туда можно дойти пешком?', SR: 'Mogu li stići tamo peške?', ES: '¿Puedo ir andando?' },
       tags: ['direct'],
     },
     {
       id: 'asking-for-directions-9',
       text: 'Where exactly is the entrance?',
-      translations: { RU: 'Где именно вход?', SR: 'Gde je tačno ulaz?', CHI: '入口确切在哪里？' },
+      translations: { RU: 'Где именно вход?', SR: 'Gde je tačno ulaz?', ES: '¿Dónde está exactamente la entrada?' },
       tags: ['direct'],
     },
     {
       id: 'asking-for-directions-10',
       text: 'Could you show me on the map?',
-      translations: { RU: 'Можете показать на карте?', SR: 'Možete li mi pokazati na mapi?', CHI: '能在地图上指给我看吗？' },
+      translations: { RU: 'Можете показать на карте?', SR: 'Možete li mi pokazati na mapi?', ES: '¿Podrías enseñármelo en el mapa?' },
       tags: ['polite'],
     },
   ],
@@ -693,62 +693,62 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'phone-problems-1',
       text: 'Sorry, I didn’t catch that.',
-      translations: { RU: 'Извините, я не расслышал(а).', SR: 'Izvinite, nisam vas najbolje čuo.', CHI: '抱歉，我没听清。' },
+      translations: { RU: 'Извините, я не расслышал(а).', SR: 'Izvinite, nisam vas najbolje čuo.', ES: 'Perdón, no entendí eso.' },
       tags: ['polite'],
       context: 'When you didn’t hear'
     },
     {
       id: 'phone-problems-2',
       text: 'Could you say that again?',
-      translations: { RU: 'Можете повторить?', SR: 'Možete li ponoviti?', CHI: '能再说一遍吗？' },
+      translations: { RU: 'Можете повторить?', SR: 'Možete li ponoviti?', ES: '¿Podrías repetirlo?' },
       tags: ['polite'],
     },
     {
       id: 'phone-problems-3',
       text: 'The connection is bad.',
-      translations: { RU: 'Плохая связь.', SR: 'Veza je loša.', CHI: '信号不好。' },
+      translations: { RU: 'Плохая связь.', SR: 'Veza je loša.', ES: 'La conexión es mala.' },
       tags: ['direct'],
     },
     {
       id: 'phone-problems-4',
       text: 'You’re breaking up.',
-      translations: { RU: 'Вас прерывает.', SR: 'Prekidate se.', CHI: '你的声音断断续续的。' },
+      translations: { RU: 'Вас прерывает.', SR: 'Prekidate se.', ES: 'Se está cortando.' },
       tags: ['direct'],
     },
     {
       id: 'phone-problems-5',
       text: 'Can you speak a bit slower?',
-      translations: { RU: 'Можете говорить помедленнее?', SR: 'Možete li govoriti malo sporije?', CHI: '能说慢一点吗？' },
+      translations: { RU: 'Можете говорить помедленнее?', SR: 'Možete li govoriti malo sporije?', ES: '¿Puedes hablar un poco más despacio?' },
       tags: ['polite'],
     },
     {
       id: 'phone-problems-6',
       text: 'I can barely hear you.',
-      translations: { RU: 'Я вас почти не слышу.', SR: 'Jedva vas čujem.', CHI: '我几乎听不见你说话。' },
+      translations: { RU: 'Я вас почти не слышу.', SR: 'Jedva vas čujem.', ES: 'Apenas puedo oírte.' },
       tags: ['direct', 'urgent'],
     },
     {
       id: 'phone-problems-7',
       text: 'Let me call you back.',
-      translations: { RU: 'Я вам перезвоню.', SR: 'Pozvaću vas ponovo.', CHI: '我待会儿打给你。' },
+      translations: { RU: 'Я вам перезвоню.', SR: 'Pozvaću vas ponovo.', ES: 'Te vuelvo a llamar.' },
       tags: ['direct'],
     },
     {
       id: 'phone-problems-8',
       text: 'There’s a lot of noise here.',
-      translations: { RU: 'Тут очень шумно.', SR: 'Ovde je velika buka.', CHI: '这里很吵。' },
+      translations: { RU: 'Тут очень шумно.', SR: 'Ovde je velika buka.', ES: 'Hay mucho ruido aquí.' },
       tags: ['direct'],
     },
     {
       id: 'phone-problems-9',
       text: 'Can you text me instead?',
-      translations: { RU: 'Можете написать сообщение?', SR: 'Možete li mi napisati poruku?', CHI: '能给我发短信吗？' },
+      translations: { RU: 'Можете написать сообщение?', SR: 'Možete li mi napisati poruku?', ES: '¿Puedes enviarme un mensaje mejor?' },
       tags: ['polite'],
     },
     {
       id: 'phone-problems-10',
       text: 'I think we got disconnected.',
-      translations: { RU: 'Кажется, нас разъединило.', SR: 'Mislim da se veza prekinula.', CHI: '我想我们的电话断了。' },
+      translations: { RU: 'Кажется, нас разъединило.', SR: 'Mislim da se veza prekinula.', ES: 'Creo que se cortó la llamada.' },
       tags: ['direct'],
     },
   ],
@@ -756,55 +756,55 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'problems-emergencies-1',
       text: 'I need help right now.',
-      translations: { RU: 'Мне срочно нужна помощь.', SR: 'Treba mi pomoć odmah.', CHI: '我现在需要帮助。' },
+      translations: { RU: 'Мне срочно нужна помощь.', SR: 'Treba mi pomoć odmah.', ES: 'Necesito ayuda ahora mismo.' },
       tags: ['urgent', 'direct'],
     },
     {
       id: 'problems-emergencies-2',
       text: 'Something’s wrong.',
-      translations: { RU: 'Что-то не так.', SR: 'Nešto nije u redu.', CHI: '出问题了。' },
+      translations: { RU: 'Что-то не так.', SR: 'Nešto nije u redu.', ES: 'Algo va mal.' },
       tags: ['urgent'],
     },
     {
       id: 'problems-emergencies-3',
       text: 'I’ve lost my phone.',
-      translations: { RU: 'Я потерял(а) телефон.', SR: 'Izgubio/la sam telefon.', CHI: '我的手机丢了。' },
+      translations: { RU: 'Я потерял(а) телефон.', SR: 'Izgubio/la sam telefon.', ES: 'He perdido mi teléfono.' },
       tags: ['urgent', 'direct'],
     },
     {
       id: 'problems-emergencies-4',
       text: 'My wallet was stolen.',
-      translations: { RU: 'У меня украли кошелёк.', SR: 'Ukraden mi je novčanik.', CHI: '我的钱包被偷了。' },
+      translations: { RU: 'У меня украли кошелёк.', SR: 'Ukraden mi je novčanik.', ES: 'Me han robado la cartera.' },
       tags: ['urgent', 'direct'],
     },
     {
       id: 'problems-emergencies-5',
       text: 'I don’t feel safe here.',
-      translations: { RU: 'Мне здесь небезопасно.', SR: 'Ne osećam se bezbedno ovde.', CHI: '我在这里感觉不安全。' },
+      translations: { RU: 'Мне здесь небезопасно.', SR: 'Ne osećam se bezbedno ovde.', ES: 'No me siento seguro aquí.' },
       tags: ['urgent'],
     },
     {
       id: 'problems-emergencies-6',
       text: 'This is an emergency.',
-      translations: { RU: 'Это срочно.', SR: 'Ovo je hitan slučaj.', CHI: '这是紧急情况。' },
+      translations: { RU: 'Это срочно.', SR: 'Ovo je hitan slučaj.', ES: 'Esto es una emergencia.' },
       tags: ['urgent'],
     },
     {
       id: 'problems-emergencies-7',
       text: 'I need medical help.',
-      translations: { RU: 'Мне нужна медицинская помощь.', SR: 'Treba mi medicinska pomoć.', CHI: '我需要医疗帮助。' },
+      translations: { RU: 'Мне нужна медицинская помощь.', SR: 'Treba mi medicinska pomoć.', ES: 'Necesito ayuda médica.' },
       tags: ['urgent'],
     },
     {
       id: 'problems-emergencies-8',
       text: 'Can someone help me, please?',
-      translations: { RU: 'Кто-нибудь, помогите, пожалуйста.', SR: 'Može li neko da mi pomogne, molim vas?', CHI: '有人能帮帮我吗，拜托？' },
+      translations: { RU: 'Кто-нибудь, помогите, пожалуйста.', SR: 'Može li neko da mi pomogne, molim vas?', ES: '¿Alguien puede ayudarme, por favor?' },
       tags: ['urgent', 'polite'],
     },
     {
       id: 'problems-emergencies-9',
       text: 'I don’t know what to do.',
-      translations: { RU: 'Я не знаю, что делать.', SR: 'Ne znam šta da radim.', CHI: '我不知道该怎么办。' },
+      translations: { RU: 'Я не знаю, что делать.', SR: 'Ne znam šta da radim.', ES: 'No sé qué hacer.' },
       tags: ['urgent'],
     },
   ],
@@ -812,61 +812,61 @@ const BANK: Record<BankScenario, PhraseEntry[]> = {
     {
       id: 'paying-money-1',
       text: 'Can I pay by card?',
-      translations: { RU: 'Можно картой?', SR: 'Mogu li platiti karticom?', CHI: '我可以刷卡吗？' },
+      translations: { RU: 'Можно картой?', SR: 'Mogu li platiti karticom?', ES: '¿Puedo pagar con tarjeta?' },
       tags: ['direct'],
     },
     {
       id: 'paying-money-2',
       text: 'Do you take cash?',
-      translations: { RU: 'Вы принимаете наличные?', SR: 'Da li primate gotovinu?', CHI: '你们收现金吗？' },
+      translations: { RU: 'Вы принимаете наличные?', SR: 'Da li primate gotovinu?', ES: '¿Aceptan efectivo?' },
       tags: ['direct'],
     },
     {
       id: 'paying-money-3',
       text: 'My card didn’t go through.',
-      translations: { RU: 'Карта не прошла.', SR: 'Moja kartica nije prošla.', CHI: '我的卡刷不过去。' },
+      translations: { RU: 'Карта не прошла.', SR: 'Moja kartica nije prošla.', ES: 'Mi tarjeta no pasó.' },
       tags: ['urgent', 'direct'],
     },
     {
       id: 'paying-money-4',
       text: 'Can I split the bill?',
-      translations: { RU: 'Можно разделить счёт?', SR: 'Možemo li podeliti račun?', CHI: '我们可以分开付吗？' },
+      translations: { RU: 'Можно разделить счёт?', SR: 'Možemo li podeliti račun?', ES: '¿Podemos dividir la cuenta?' },
       tags: ['direct'],
     },
     {
       id: 'paying-money-5',
       text: 'Is service included?',
-      translations: { RU: 'Обслуживание включено?', SR: 'Da li je usluga uračunata?', CHI: '服务费包含在内吗？' },
+      translations: { RU: 'Обслуживание включено?', SR: 'Da li je usluga uračunata?', ES: '¿El servicio está incluido?' },
       tags: ['direct'],
     },
     {
       id: 'paying-money-6',
       text: 'How much do I owe you?',
-      translations: { RU: 'Сколько я должен(на)?', SR: 'Koliko sam vam dužan?', CHI: '我该付多少钱？' },
+      translations: { RU: 'Сколько я должен(на)?', SR: 'Koliko sam vam dužan?', ES: '¿Cuánto le debo?' },
       tags: ['direct'],
     },
     {
       id: 'paying-money-7',
       text: 'Can I get a receipt?',
-      translations: { RU: 'Можно чек?', SR: 'Mogu li dobiti račun?', CHI: '可以给我收据吗？' },
+      translations: { RU: 'Можно чек?', SR: 'Mogu li dobiti račun?', ES: '¿Me da un recibo?' },
       tags: ['direct'],
     },
     {
       id: 'paying-money-8',
       text: 'Is there a fee for this?',
-      translations: { RU: 'Есть комиссия?', SR: 'Da li se naplaćuje naknada?', CHI: '这项有手续费吗？' },
+      translations: { RU: 'Есть комиссия?', SR: 'Da li se naplaćuje naknada?', ES: '¿Hay alguna comisión por esto?' },
       tags: ['direct'],
     },
     {
       id: 'paying-money-9',
       text: 'I’ll pay for this one.',
-      translations: { RU: 'Я заплачу за это.', SR: 'Ja ću platiti za ovo.', CHI: '这个我来付。' },
+      translations: { RU: 'Я заплачу за это.', SR: 'Ja ću platiti za ovo.', ES: 'Yo pago esto.' },
       tags: ['polite', 'friendly'],
     },
     {
       id: 'paying-money-10',
       text: 'Keep the change.',
-      translations: { RU: 'Сдачи не надо.', SR: 'Zadržite kusur.', CHI: '不用找了。' },
+      translations: { RU: 'Сдачи не надо.', SR: 'Zadržite kusur.', ES: 'Quédese con el cambio.' },
       tags: ['polite', 'friendly'],
     },
   ],
@@ -934,12 +934,12 @@ function SpeakerIcon({ size = 18 }: { size?: number }) {
   );
 }
 
-/** ✅ Translate icon: "RU" letters only (bigger + not cropped) */
-function TranslateRuIcon() {
+/** ✅ Translate icon: "ES" letters only (bigger + not cropped) */
+function TranslateEsIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 28" fill="none" aria-hidden="true">
       <text x="2" y="21" fontSize="16" fontWeight="900" fontFamily="Arial, sans-serif" fill="black">
-        RU
+        ES
       </text>
     </svg>
   );
@@ -991,6 +991,8 @@ function LangPill({ label, active, onClick }: { label: string; active: boolean; 
   );
 }
 
+
+
 type DropdownItem = { label: string; scenario: Scenario };
 
 function SavedList({
@@ -1001,8 +1003,8 @@ function SavedList({
 }: {
   favorites: string[];
   onRemove: (id: string) => void;
-  onSpeak: (text: string, language: 'EN' | 'SR' | 'CHI') => void;
-  lang: 'EN' | 'SR' | 'CHI';
+  onSpeak: (text: string, language: 'EN' | 'SR' | 'ES') => void;
+  lang: 'EN' | 'SR' | 'ES';
 }) {
   const allPhrases = useMemo(() => Object.values(BANK).flat(), []);
   const savedPhrases = useMemo(() => allPhrases.filter((p) => favorites.includes(p.id)), [allPhrases, favorites]);
@@ -1022,17 +1024,7 @@ function SavedList({
     }
   }, [savedPhrases.length, activeIndex]);
 
-  if (savedPhrases.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full text-center px-6">
-        <div className="text-4xl mb-4">❤️</div>
-        <div className="text-lg font-bold text-black/60">No saved phrases yet</div>
-        <div className="text-sm text-black/40 mt-2">
-          Click the heart icon on any phrase to save it here for later.
-        </div>
-      </div>
-    );
-  }
+  if (savedPhrases.length === 0) return null;
 
   const handleEnd = () => {
     if (Math.abs(dragX) > 70) {
@@ -1104,7 +1096,7 @@ function SavedList({
       <div className="hidden min-[1200px]:block absolute inset-x-0 top-0 max-h-[480px] overflow-y-auto thin-scroll px-0 py-2">
         <div className="space-y-3 px-6">
           {savedPhrases.map((p) => (
-            <div key={p.id} className="bg-white/60 backdrop-blur-md rounded-[24px] p-5 relative group transition-all hover:bg-white/80 shadow-sm border border-white/40">
+            <div key={p.id} className="bg-white/20 backdrop-blur-xl rounded-[24px] p-5 relative group transition-all hover:bg-white/40 shadow-sm border border-white/30">
               <div className="pr-8">
                 <div className="font-bold text-black text-lg leading-tight">
                   {lang === 'EN' ? p.text : (p.translations[lang] || p.text)}
@@ -1126,16 +1118,11 @@ function SavedList({
                 >
                   <SpeakerIcon />
                 </button>
-                <button
-                  onClick={() => navigator.clipboard.writeText(p.text)}
-                  className="text-[10px] font-bold uppercase tracking-wider text-black/40 hover:text-black transition-colors"
-                >
-                  Copy
-                </button>
+
               </div>
             </div>
           ))}
-          <div className="h-4" />
+          < div className="h-4" />
         </div>
       </div>
 
@@ -1150,7 +1137,7 @@ function SavedList({
           {/* Active Card */}
           <div
             key={currentPhrase.id} // Force re-render on card change
-            className={`absolute inset-0 bg-white/60 backdrop-blur-md rounded-[24px] p-4 shadow-xl border border-white/40 flex flex-col justify-between select-none touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            className={`absolute inset-0 bg-white/20 backdrop-blur-xl rounded-[24px] p-4 shadow-xl border border-white/40 flex flex-col justify-between select-none touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
             style={{
               transform: `translateX(${exitX !== null ? exitX : dragX}px) rotate(${(exitX !== null ? exitX : dragX) * 0.08}deg)`,
               transition: isDragging ? 'none' : 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
@@ -1185,12 +1172,7 @@ function SavedList({
                 >
                   <SpeakerIcon size={20} />
                 </button>
-                <button
-                  onClick={() => navigator.clipboard.writeText(currentPhrase.text)}
-                  className="text-[10px] font-bold uppercase tracking-wider text-black/40 active:text-black"
-                >
-                  Copy
-                </button>
+
               </div>
               <button
                 onClick={() => onRemove(currentPhrase.id)}
@@ -1207,7 +1189,7 @@ function SavedList({
           {savedPhrases.length > 1 ? '← Swipe to browse →' : 'Your saved phrase'}
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
@@ -1234,7 +1216,7 @@ export default function Page() {
     });
   };
 
-  const [lang, setLang] = useState<'EN' | 'SR' | 'CHI'>('EN');
+  const [lang, setLang] = useState<'EN' | 'SR' | 'ES'>('EN');
 
   const [searchOpenDesktop, setSearchOpenDesktop] = useState(false);
   const [searchOpenMobile, setSearchOpenMobile] = useState(false);
@@ -1389,20 +1371,20 @@ export default function Page() {
     synth.cancel();
 
     const u = new SpeechSynthesisUtterance(txt);
-    u.lang = lang === 'EN' ? 'en-US' : lang === 'SR' ? 'sr-RS' : 'zh-CN';
+    u.lang = lang === 'EN' ? 'en-US' : lang === 'SR' ? 'sr-RS' : 'es-ES';
     u.rate = 1;
     u.pitch = 1;
 
     synth.speak(u);
   }
 
-  function speakText(text: string, language: 'EN' | 'SR' | 'CHI') {
+  function speakText(text: string, language: 'EN' | 'SR' | 'ES') {
     const synth = typeof window !== 'undefined' ? window.speechSynthesis : null;
     if (!synth || !text) return;
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
     // Use target language or default to english if EN
-    u.lang = language === 'EN' ? 'en-US' : language === 'SR' ? 'sr-RS' : 'zh-CN';
+    u.lang = language === 'EN' ? 'en-US' : language === 'SR' ? 'sr-RS' : 'es-ES';
     synth.speak(u);
   }
 
@@ -1413,7 +1395,7 @@ export default function Page() {
   }, [result, lang]);
 
   const textSize = 'text-sm';
-  const glass = 'bg-white/28 backdrop-blur-xl border border-white/35 shadow-[0_18px_60px_rgba(0,0,0,0.10)]';
+  const glass = 'bg-white/20 backdrop-blur-xl border border-white/35 shadow-[0_18px_60px_rgba(0,0,0,0.10)]';
 
   const btnBaseCommon = `w-full text-left px-6 py-3 ${textSize} font-bold select-none rounded-full transition-none`;
   const btnInactive =
@@ -1597,9 +1579,11 @@ export default function Page() {
           <TelegramButton size={40} />
         </div>
 
-        <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center z-10">
-          <img src="/title.svg" alt="SAY IT FOR ME" className="h-[64px] w-auto mx-auto" draggable={false} />
-          <p className="text-lg text-black mt-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+        <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center z-10 w-full px-4">
+          <h1 className="text-4xl lg:text-5xl font-bold text-black/30 tracking-tight mb-2">
+            Say it for me
+          </h1>
+          <p className="text-lg text-black mt-0" style={{ fontFamily: 'Arial, sans-serif' }}>
             Your assistant when words are hard to find
           </p>
         </div>
@@ -1714,45 +1698,61 @@ export default function Page() {
         </div>
 
         <div
-          className={`absolute right-12 top-32 z-10 ${scenario === 'saved' ? '' : glass} ${scenario === 'saved' ? '' : panelRadius} ${panelW} ${panelH} flex flex-col overflow-hidden transition-opacity duration-300`}
+          className={`absolute right-12 top-32 z-10 ${(scenario === 'saved' && favorites.length > 0) ? '' : glass} ${(scenario === 'saved' && favorites.length > 0) ? '' : panelRadius} ${panelW} ${panelH} flex flex-col overflow-hidden transition-opacity duration-300`}
           style={{ visibility: (showResult || scenario === 'saved') ? 'visible' : 'hidden' }}
           aria-hidden={!(showResult || scenario === 'saved')}
         >
           {scenario === 'saved' ? (
-            <div className="h-full flex flex-col py-4">
-              {/* Language toggle for Saved list - TOP on Desktop */}
-              <div className="flex justify-center mb-6 z-20">
-                <div className="bg-white/70 backdrop-blur-md rounded-full px-1 py-1 flex gap-1 shadow-lg border border-white/20">
-                  <LangPill label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
-                  <LangPill label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
-                  <LangPill label="CHI" active={lang === 'CHI'} onClick={() => setLang('CHI')} />
+            favorites.length === 0 ? (
+              <div className="h-full flex flex-col px-11 pt-28 pb-16 items-center justify-center text-center">
+                <div className="text-[18px] font-bold leading-tight whitespace-pre-line text-black">
+                  No saved phrases yet
+                </div>
+                <div className="mt-2 text-sm text-black/60 font-medium whitespace-pre-line">
+                  Click the heart icon on any phrase to save it here for later.
                 </div>
               </div>
+            ) : (
+              <div className="h-full flex flex-col py-4">
+                {/* Language toggle for Saved list - TOP on Desktop */}
+                <div className="flex justify-center mb-6 z-20">
+                  <div className="bg-white/70 backdrop-blur-md rounded-full px-1 py-1 flex gap-1 shadow-lg border border-white/20">
+                    <LangPill label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
+                    <LangPill label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
+                    <LangPill label="ES" active={lang === 'ES'} onClick={() => setLang('ES')} />
+                  </div>
+                </div>
 
-              {/* No glass background here, just the list */}
-              <div className="flex-1 relative">
-                <SavedList
-                  favorites={favorites}
-                  onRemove={toggleFavorite}
-                  onSpeak={speakText}
-                  lang={lang}
-                />
+                {/* No glass background here, just the list */}
+                <div className="flex-1 relative">
+                  <SavedList
+                    favorites={favorites}
+                    onRemove={toggleFavorite}
+                    onSpeak={speakText}
+                    lang={lang}
+                  />
+                </div>
               </div>
-            </div>
-          ) : (
+            )) : (
             <div className="h-full flex flex-col px-11 pt-28 pb-16">
               <div className="flex items-center justify-center gap-2">
                 <LangPill label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
                 <LangPill label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
-                <LangPill label="CHI" active={lang === 'CHI'} onClick={() => setLang('CHI')} />
+                <LangPill label="ES" active={lang === 'ES'} onClick={() => setLang('ES')} />
               </div>
 
               <div className="flex-1 flex flex-col items-center justify-center px-2">
+                <div className="flex justify-center mb-4 md:mb-6">
+                  <button onClick={speak} className="w-12 h-12 rounded-full bg-black/5 hover:bg-black/10 flex items-center justify-center transition-colors" aria-label="Voice">
+                    <SpeakerIcon size={24} />
+                  </button>
+                </div>
+
                 <div className="text-black text-[18px] font-bold leading-tight text-center whitespace-pre-line max-w-[260px]">
                   {displayResult}
                   {result?.translations.RU && (
                     <div className="mt-1 text-sm text-black/60 font-medium whitespace-pre-line">
-                      {result.translations.RU}
+                      {result?.translations.RU}
                     </div>
                   )}
                   {result?.context && lang === 'EN' && (
@@ -1761,35 +1761,25 @@ export default function Page() {
                     </div>
                   )}
                 </div>
-
-                <div className="mt-3 flex items-center justify-center gap-0">
-                  <button onClick={speak} className={iconOnlyBtn} aria-label="Voice" title="Voice">
-                    <SpeakerIcon />
-                  </button>
-                  <button
-                    onClick={() => result && toggleFavorite(result.id)}
-                    className={`${iconOnlyBtn} -ml-2`}
-                    aria-label="Save"
-                    title="Save for later"
-                  >
-                    <HeartIcon size={22} filled={!!result && favorites.includes(result.id)} />
-                  </button>
-                </div>
               </div>
 
               <div className="flex justify-center gap-4 items-center">
-                <button
-                  onClick={copy}
-                  className="w-14 h-14 rounded-full bg-[#6fbf3f] text-white font-bold shadow-xl transition-none hover:scale-105 active:scale-100 text-[11px]"
-                >
-                  Copy
-                </button>
+
                 <button
                   onClick={generateNext}
                   className="w-14 h-14 rounded-full bg-black text-white font-bold shadow-xl transition-none hover:scale-105 active:scale-100 text-[11px]"
                 >
                   Again
                 </button>
+                {result && (
+                  <button
+                    onClick={() => toggleFavorite(result.id)}
+                    className="w-14 h-14 rounded-full bg-white border border-black/5 flex items-center justify-center shadow-lg transition-none active:scale-100"
+                    aria-label="Save"
+                  >
+                    <HeartIcon size={24} filled={!!result && favorites.includes(result.id)} />
+                  </button>
+                )}
               </div>
             </div>
           )}
@@ -1802,9 +1792,11 @@ export default function Page() {
           <TelegramButton size={38} />
         </div>
 
-        <div className="absolute top-5 left-1/2 -translate-x-1/2 text-center z-10">
-          <img src="/title.svg" alt="SAY IT FOR ME" className="h-[52px] md:h-[60px] w-auto mx-auto" draggable={false} />
-          <p className="text-base md:text-lg text-black mt-2" style={{ fontFamily: 'Arial, sans-serif' }}>
+        <div className="absolute top-5 left-1/2 -translate-x-1/2 text-center z-10 w-full px-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-black/30 tracking-tight mb-1">
+            Say it for me
+          </h1>
+          <p className="text-base md:text-lg text-black mt-1" style={{ fontFamily: 'Arial, sans-serif' }}>
             Your assistant when words are hard to find
           </p>
         </div>
@@ -1814,80 +1806,85 @@ export default function Page() {
             <div className="w-full max-w-[560px] md:max-w-[860px]">
               <div className="h-[460px] md:h-[520px] flex items-start justify-center relative">
                 {scenario === 'saved' ? (
-                  /* No glass background wrapper here */
-                  <div className="w-full h-full overflow-hidden flex flex-col relative py-2">
-                    <SavedList
-                      favorites={favorites}
-                      onRemove={toggleFavorite}
-                      onSpeak={speakText}
-                      lang={lang}
-                    />
-                    <div className="absolute bottom-44 left-0 right-0 flex justify-center z-20 pointer-events-none">
-                      <div className="pointer-events-auto bg-white/70 backdrop-blur-md rounded-full padding-1 px-1 py-1 flex gap-1 shadow-lg border border-white/20">
-                        <LangPill label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
-                        <LangPill label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
-                        <LangPill label="CHI" active={lang === 'CHI'} onClick={() => setLang('CHI')} />
+                  favorites.length === 0 ? (
+                    <div className={`${glass} rounded-[34px] md:rounded-[44px] px-5 py-5 md:px-10 md:py-8 w-full`}>
+                      <div className="mt-5 md:mt-7 text-black text-center max-w-full px-2">
+                        <div className="text-[17px] md:text-[21px] font-bold leading-snug whitespace-pre-line">
+                          No saved phrases yet
+                        </div>
+                        <div className="mt-1 text-sm md:text-base text-black/60 font-medium whitespace-pre-line">
+                          Click the heart icon on any phrase to save it here for later.
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ) : showResult ? (
-                  <div className={`${glass} rounded-[34px] md:rounded-[44px] px-5 py-5 md:px-10 md:py-8 w-full`}>
-                    {/* ✅ MOBILE/TABLET: languages LEFT, icons RIGHT */}
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-2 md:gap-3 md:[&>button]:w-12 md:[&>button]:h-12 md:[&>button]:text-[13px]">
-                        <LangPill label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
-                        <LangPill label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
-                        <LangPill label="CHI" active={lang === 'CHI'} onClick={() => setLang('CHI')} />
+                  ) : (
+                    /* No glass background wrapper here */
+                    <div className="w-full h-full overflow-hidden flex flex-col relative py-2">
+                      <SavedList
+                        favorites={favorites}
+                        onRemove={toggleFavorite}
+                        onSpeak={speakText}
+                        lang={lang}
+                      />
+                      <div className="absolute bottom-44 left-0 right-0 flex justify-center z-20 pointer-events-none">
+                        <div className="pointer-events-auto bg-white/70 backdrop-blur-md rounded-full padding-1 px-1 py-1 flex gap-1 shadow-lg border border-white/20">
+                          <LangPill label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
+                          <LangPill label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
+                          <LangPill label="ES" active={lang === 'ES'} onClick={() => setLang('ES')} />
+                        </div>
                       </div>
-
-                      <div className="flex items-center gap-0 md:[&>button]:w-12 md:[&>button]:h-12">
-                        <button onClick={speak} className={iconOnlyBtn} aria-label="Voice">
-                          <SpeakerIcon />
-                        </button>
+                    </div>
+                  )) : showResult ? (
+                    <div className={`${glass} rounded-[34px] md:rounded-[44px] px-5 py-5 md:px-10 md:py-8 w-full`}>
+                      {/* ✅ MOBILE/TABLET: languages LEFT, icons RIGHT */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 md:gap-3 md:[&>button]:w-12 md:[&>button]:h-12 md:[&>button]:text-[13px]">
+                          <LangPill label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
+                          <LangPill label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
+                          <LangPill label="ES" active={lang === 'ES'} onClick={() => setLang('ES')} />
+                        </div>
                         {result && (
                           <button
                             onClick={() => toggleFavorite(result.id)}
-                            className={`${iconOnlyBtn} -ml-2`}
+                            className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/20 hover:bg-white/40 border border-white/20 flex items-center justify-center shadow-sm transition-none active:scale-100"
                             aria-label="Save"
                           >
-                            <HeartIcon size={22} filled={favorites.includes(result.id)} />
+                            <HeartIcon size={24} filled={favorites.includes(result.id)} />
                           </button>
                         )}
                       </div>
-                    </div>
 
-                    <div className="mt-5 md:mt-7 text-black text-center max-w-full px-2">
-                      <div className="text-[17px] md:text-[21px] font-bold leading-snug whitespace-pre-line">
-                        {displayResult}
+
+
+                      <div className="mt-5 md:mt-7 text-black text-center max-w-full px-2">
+                        <div className="text-[17px] md:text-[21px] font-bold leading-snug whitespace-pre-line">
+                          {displayResult}
+                        </div>
+                        {result?.translations.RU && (
+                          <div className="mt-1 text-sm md:text-base text-black/60 font-medium whitespace-pre-line">
+                            {result?.translations.RU}
+                          </div>
+                        )}
+                        {result?.context && lang === 'EN' && (
+                          <div className="mt-2 text-xs text-black/40 font-medium italic whitespace-normal">
+                            Use when: {result.context}
+                          </div>
+                        )}
                       </div>
-                      {result?.translations.RU && (
-                        <div className="mt-1 text-sm md:text-base text-black/60 font-medium whitespace-pre-line">
-                          {result.translations.RU}
-                        </div>
-                      )}
-                      {result?.context && lang === 'EN' && (
-                        <div className="mt-2 text-xs text-black/40 font-medium italic whitespace-normal">
-                          Use when: {result.context}
-                        </div>
-                      )}
-                    </div>
 
-                    <div className="mt-5 md:mt-7 flex items-center justify-center gap-3 md:gap-4">
-                      <button
-                        onClick={copy}
-                        className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#6fbf3f] text-white font-bold shadow-xl transition-none active:scale-100 text-[11px] md:text-[12px]"
-                      >
-                        Copy
-                      </button>
-                      <button
-                        onClick={generateNext}
-                        className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-black text-white font-bold shadow-xl transition-none active:scale-100 text-[11px] md:text-[12px]"
-                      >
-                        Again
-                      </button>
+
+
+                      <div className="mt-5 md:mt-7 flex items-center justify-center gap-3 md:gap-4">
+
+                        <button
+                          onClick={generateNext}
+                          className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-black text-white font-bold shadow-xl transition-none active:scale-100 text-[11px] md:text-[12px]"
+                        >
+                          Again
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ) : (
+                  ) : (
                   <div />
                 )}
               </div>
@@ -1970,6 +1967,19 @@ export default function Page() {
             <div className="flex-1 min-w-0 font-bold text-black/70 truncate">
               {scenario === 'saved' ? 'Saved ❤️' : topItem.label}
             </div>
+
+            {result && showResult && scenario !== 'saved' && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  speak();
+                }}
+                className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/70 grid place-items-center transition-none active:scale-95"
+                aria-label="Voice"
+              >
+                <SpeakerIcon size={24} />
+              </button>
+            )}
 
             <button
               onClick={(e) => {
