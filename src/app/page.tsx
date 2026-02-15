@@ -974,12 +974,13 @@ function TelegramButton({ size = 40 }: { size?: number }) {
   );
 }
 
-function LangPill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function LangPill({ label, active, onClick, className = '' }: { label: string; active: boolean; onClick: () => void; className?: string }) {
   return (
     <button
       onClick={onClick}
       className={[
-        'w-10 h-10 rounded-full grid place-items-center font-black text-[12px] select-none transition-none',
+        'rounded-full grid place-items-center font-black select-none transition-none',
+        className || 'w-10 h-10 text-[12px]',
         active
           ? 'bg-white/28 backdrop-blur-xl border border-white/35 text-black shadow-[0_12px_30px_rgba(0,0,0,0.10)]'
           : 'bg-white/18 backdrop-blur-xl border border-white/25 text-black/55 hover:text-black hover:bg-white/24',
@@ -1198,6 +1199,39 @@ export default function Page() {
 
   const [showResult, setShowResult] = useState(false);
   const [result, setResult] = useState<PhraseEntry | null>(null);
+
+  // Swipe logic for Result Card
+  const [resultDragX, setResultDragX] = useState(0);
+  const [resultExitX, setResultExitX] = useState<number | null>(null);
+  const [isResultDragging, setIsResultDragging] = useState(false);
+  const resultTouchStart = useRef<number | null>(null);
+
+  const handleResultTouchStart = (e: React.TouchEvent) => {
+    if (result && favorites.includes(result.id)) return;
+    resultTouchStart.current = e.touches[0].clientX;
+    setIsResultDragging(true);
+  };
+
+  const handleResultTouchMove = (e: React.TouchEvent) => {
+    if (resultTouchStart.current === null) return;
+    const diff = e.touches[0].clientX - resultTouchStart.current;
+    setResultDragX(diff);
+  };
+
+  const handleResultTouchEnd = () => {
+    if (Math.abs(resultDragX) > 100) {
+      setResultExitX(resultDragX > 0 ? 500 : -500);
+      setTimeout(() => {
+        hideResult();
+        setResultDragX(0);
+        setResultExitX(null);
+      }, 200);
+    } else {
+      setResultDragX(0);
+    }
+    resultTouchStart.current = null;
+    setIsResultDragging(false);
+  };
 
   const [favorites, setFavorites] = useState<string[]>([]);
 
@@ -1788,7 +1822,7 @@ export default function Page() {
 
       {/* =============== MOBILE / TABLET (<1200) =============== */}
       <div className="mobileOnly">
-        <div className="absolute top-5 left-5 z-10">
+        <div className="absolute top-5 right-5 z-10">
           <TelegramButton size={38} />
         </div>
 
@@ -1801,10 +1835,10 @@ export default function Page() {
           </p>
         </div>
 
-        <div className="absolute left-0 right-0 top-[148px] md:top-[148px] bottom-[92px] px-4 md:px-6 z-20">
+        <div className="absolute left-0 right-0 top-[110px] md:top-[148px] bottom-[92px] px-4 md:px-6 z-20">
           <div className="h-full flex flex-col items-center">
             <div className="w-full max-w-[560px] md:max-w-[860px]">
-              <div className="h-[460px] md:h-[520px] flex items-start justify-center relative">
+              <div className="h-[340px] md:h-[520px] flex items-start justify-center relative">
                 {scenario === 'saved' ? (
                   favorites.length === 0 ? (
                     <div className={`${glass} rounded-[34px] md:rounded-[44px] px-5 py-5 md:px-10 md:py-8 w-full`}>
@@ -1835,21 +1869,30 @@ export default function Page() {
                       </div>
                     </div>
                   )) : showResult ? (
-                    <div className={`${glass} rounded-[34px] md:rounded-[44px] px-5 py-5 md:px-10 md:py-8 w-full`}>
+                    <div
+                      className={`${glass} rounded-[34px] md:rounded-[44px] px-5 py-5 md:px-10 md:py-8 w-full ${isResultDragging ? 'cursor-grabbing' : ''}`}
+                      style={{
+                        transform: `translateX(${resultExitX !== null ? resultExitX : resultDragX}px) rotate(${(resultExitX !== null ? resultExitX : resultDragX) * 0.05}deg)`,
+                        transition: isResultDragging ? 'none' : 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                      }}
+                      onTouchStart={handleResultTouchStart}
+                      onTouchMove={handleResultTouchMove}
+                      onTouchEnd={handleResultTouchEnd}
+                    >
                       {/* ✅ MOBILE/TABLET: languages LEFT, icons RIGHT */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 md:gap-3 md:[&>button]:w-12 md:[&>button]:h-12 md:[&>button]:text-[13px]">
-                          <LangPill label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
-                          <LangPill label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
-                          <LangPill label="ES" active={lang === 'ES'} onClick={() => setLang('ES')} />
+                          <LangPill className="w-8 h-8 text-[10px] md:w-12 md:h-12 md:text-[13px]" label="EN" active={lang === 'EN'} onClick={() => setLang('EN')} />
+                          <LangPill className="w-8 h-8 text-[10px] md:w-12 md:h-12 md:text-[13px]" label="SR" active={lang === 'SR'} onClick={() => setLang('SR')} />
+                          <LangPill className="w-8 h-8 text-[10px] md:w-12 md:h-12 md:text-[13px]" label="ES" active={lang === 'ES'} onClick={() => setLang('ES')} />
                         </div>
                         {result && (
                           <button
                             onClick={() => toggleFavorite(result.id)}
-                            className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-white/20 hover:bg-white/40 border border-white/20 flex items-center justify-center shadow-sm transition-none active:scale-100"
+                            className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/20 hover:bg-white/40 border border-white/20 flex items-center justify-center shadow-sm transition-none active:scale-100"
                             aria-label="Save"
                           >
-                            <HeartIcon size={24} filled={favorites.includes(result.id)} />
+                            <HeartIcon size={18} filled={favorites.includes(result.id)} />
                           </button>
                         )}
                       </div>
@@ -1857,11 +1900,11 @@ export default function Page() {
 
 
                       <div className="mt-5 md:mt-7 text-black text-center max-w-full px-2">
-                        <div className="text-[17px] md:text-[21px] font-bold leading-snug whitespace-pre-line">
+                        <div className="text-[15px] md:text-[21px] font-bold leading-snug whitespace-pre-line">
                           {displayResult}
                         </div>
                         {result?.translations.RU && (
-                          <div className="mt-1 text-sm md:text-base text-black/60 font-medium whitespace-pre-line">
+                          <div className="mt-1 text-xs md:text-base text-black/60 font-medium whitespace-pre-line">
                             {result?.translations.RU}
                           </div>
                         )}
@@ -1878,7 +1921,7 @@ export default function Page() {
 
                         <button
                           onClick={generateNext}
-                          className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-black text-white font-bold shadow-xl transition-none active:scale-100 text-[11px] md:text-[12px]"
+                          className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-black text-white font-bold shadow-xl transition-none active:scale-100 text-[11px] md:text-[12px]"
                         >
                           Again
                         </button>
