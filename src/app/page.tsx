@@ -1167,7 +1167,11 @@ function SavedList({
 
   const handleMouseUp = () => handleEnd();
 
-  const currentPhrase = savedPhrases[activeIndex];
+  const safeActiveIndex = Math.min(activeIndex, Math.max(0, savedPhrases.length - 1));
+  const currentPhrase = savedPhrases[safeActiveIndex];
+
+  if (!currentPhrase) return null;
+
   const scenarioId = currentPhrase.id.split('-').slice(0, -1).join('-');
   // If parsing fails or assumes standard format (e.g. 'delivery-1'), join back everything except last part
   // Actually IDs are like 'how-are-you-1'. So we need to handle that.
@@ -1244,7 +1248,7 @@ function SavedList({
           >
             <div className="flex items-center justify-between mb-0 shrink-0">
               <div className="text-black/40 text-[10px] truncate max-w-[200px]">
-                {scenarioLabel} {activeIndex + 1}/{savedPhrases.length}
+                {scenarioLabel} {safeActiveIndex + 1}/{savedPhrases.length}
               </div>
               <button
                 onClick={() => onRemove(currentPhrase.id)}
