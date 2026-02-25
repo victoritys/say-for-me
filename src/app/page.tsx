@@ -945,13 +945,13 @@ function TranslateEsIcon() {
   );
 }
 
-function HeartIcon({ filled, size = 18 }: { filled: boolean; size?: number }) {
+function HeartIcon({ filled, size = 18, strokeColor = 'black' }: { filled: boolean; size?: number; strokeColor?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
         fill={filled ? '#FF3B30' : 'none'}
-        stroke={filled ? '#FF3B30' : 'black'}
+        stroke={filled ? '#FF3B30' : strokeColor}
         strokeWidth="2"
       />
     </svg>
@@ -1018,7 +1018,7 @@ function MobileLanguageSelector({ lang, setLang }: { lang: 'EN' | 'SR' | 'ES'; s
   }
 
   return (
-    <div className="flex flex-col gap-1 bg-white/40 backdrop-blur-md rounded-full p-1 shadow-sm border border-white/20 animate-in fade-in zoom-in duration-200 pointer-events-auto">
+    <div className="flex flex-row gap-1 bg-white/40 backdrop-blur-md rounded-full p-1 shadow-sm border border-white/20 animate-in fade-in zoom-in duration-200 pointer-events-auto">
       {sortedLangs.map((l) => (
         <LangPill
           key={l}
@@ -1577,6 +1577,7 @@ export default function Page() {
 
   return (
     <div className="w-full h-[100svh] bg-[#c5cdd8] relative overflow-hidden text-black">
+
       <style jsx global>{`
         .desktopOnly {
           display: none;
@@ -1595,25 +1596,25 @@ export default function Page() {
 
         .thin-scroll {
           scrollbar-width: thin;
-          scrollbar-color: transparent transparent;
+          scrollbar-color: rgba(0, 0, 0, 0.08) transparent;
           transition: scrollbar-color 0.3s;
         }
         .thin-scroll:hover {
-          scrollbar-color: rgba(0, 0, 0, 0.28) transparent;
+          scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
         }
         .thin-scroll::-webkit-scrollbar {
-          width: 6px;
+          width: 5px;
         }
         .thin-scroll::-webkit-scrollbar-track {
           background: transparent;
         }
         .thin-scroll::-webkit-scrollbar-thumb {
-          background: transparent;
+          background: rgba(0, 0, 0, 0.08);
           border-radius: 999px;
           transition: background 0.3s;
         }
         .thin-scroll:hover::-webkit-scrollbar-thumb {
-          background: rgba(0, 0, 0, 0.28);
+          background: rgba(0, 0, 0, 0.15);
         }
 
         /* girl image sizing (matches your previous bg-size behavior) */
@@ -1731,14 +1732,16 @@ export default function Page() {
 
       {/* =============== DESKTOP =============== */}
       <div className="desktopOnly">
-        <div className="absolute top-8 left-8 z-10 flex items-center gap-3">
+        <div className="absolute top-[27px] left-8 z-10 flex items-center gap-3">
           <TelegramButton size={40} />
         </div>
 
-        <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center z-10 w-full px-4">
-          <h1 className="text-4xl lg:text-5xl font-bold text-black/30 tracking-tight mb-2">
-            Say it for me
-          </h1>
+        <div className="absolute top-[27px] left-1/2 -translate-x-1/2 text-center z-10 w-full px-4">
+          <img
+            src="/logo.svg"
+            alt="Say it for me"
+            className="h-10 lg:h-12 mx-auto mb-2 opacity-100 select-none pointer-events-none"
+          />
           <p className="text-lg text-black mt-0" style={{ fontFamily: 'Arial, sans-serif' }}>
             Your assistant when words are hard to find
           </p>
@@ -1748,7 +1751,7 @@ export default function Page() {
         <div className={`absolute left-12 top-32 z-10 ${glass} ${panelRadius} w-[340px] h-[610px] px-11 pt-28 pb-16 flex flex-col`}>
           <div className="flex items-center justify-between mb-4">
             <div className={`${textSize} font-bold text-black/70`}>Situation</div>
-            <div className="flex items-center gap-0">
+            <div className="flex items-center gap-[1px]">
               <button
                 type="button"
                 onClick={(e) => {
@@ -1763,11 +1766,11 @@ export default function Page() {
                     setSearchOpenDesktop(false);
                   }
                 }}
-                className={`w-9 h-9 grid place-items-center rounded-full transition-none ${scenario === 'saved' ? 'bg-black text-white' : 'bg-transparent hover:bg-white/60 text-black'}`}
+                className={`w-[34px] h-[34px] grid place-items-center rounded-full transition-none ${scenario === 'saved' ? 'bg-white/50 backdrop-blur-md shadow-sm text-black' : 'bg-transparent hover:bg-white/60 text-black'}`}
                 aria-label={scenario === 'saved' ? "Close saved" : "Saved phrases"}
                 title={scenario === 'saved' ? "Close saved" : "Saved phrases"}
               >
-                <HeartIcon filled={scenario === 'saved'} />
+                <HeartIcon size={18} filled={scenario === 'saved'} strokeColor={scenario === 'saved' ? '#FF3B30' : '#FF3B30'} />
               </button>
               <button
                 type="button"
@@ -1776,7 +1779,7 @@ export default function Page() {
                   e.stopPropagation();
                   setSearchOpenDesktop((v) => !v);
                 }}
-                className="w-9 h-9 grid place-items-center bg-transparent hover:bg-white/60 rounded-full transition-none"
+                className="w-[34px] h-[34px] grid place-items-center bg-transparent hover:bg-white/60 rounded-full transition-none"
                 aria-label="Search situations"
               >
                 <SearchIcon />
@@ -1845,10 +1848,10 @@ export default function Page() {
           <div className="flex justify-center mt-4">
             <button
               onClick={generateNext}
-              className="w-16 h-16 rounded-full shadow-xl transition-none hover:scale-105 active:scale-100 bg-[#6fbf3f] text-white flex items-center justify-center"
+              className="w-14 h-14 rounded-full shadow-xl transition-none hover:scale-105 active:scale-100 bg-[#6fbf3f] text-white flex items-center justify-center"
               aria-label="Generate phrase"
             >
-              <TwoStarsIcon size={34} />
+              <TwoStarsIcon size={30} />
             </button>
           </div>
         </div>
@@ -1923,17 +1926,17 @@ export default function Page() {
 
                 <button
                   onClick={generateNext}
-                  className="w-14 h-14 rounded-full bg-black text-white font-bold shadow-xl transition-none hover:scale-105 active:scale-100 text-[11px]"
+                  className="w-12 h-12 rounded-full bg-[#6fbf3f] text-white font-bold shadow-xl transition-none hover:scale-105 active:scale-100 text-[10px]"
                 >
                   Again
                 </button>
                 {result && (
                   <button
                     onClick={() => toggleFavorite(result.id)}
-                    className="w-14 h-14 rounded-full bg-white border border-black/5 flex items-center justify-center shadow-lg transition-none active:scale-100"
+                    className="w-12 h-12 rounded-full bg-white border border-black/5 flex items-center justify-center shadow-lg transition-none active:scale-100"
                     aria-label="Save"
                   >
-                    <HeartIcon size={24} filled={!!result && favorites.includes(result.id)} />
+                    <HeartIcon size={20} filled={!!result && favorites.includes(result.id)} strokeColor="#FF3B30" />
                   </button>
                 )}
               </div>
@@ -1945,24 +1948,19 @@ export default function Page() {
       {/* =============== MOBILE / TABLET (<1200) =============== */}
       <div className="mobileOnly">
         {/* Language Selector Top Left */}
-        <div className="absolute top-4 left-5 z-50 flex flex-col items-start">
+        <div className="absolute top-5 left-4 z-50 flex flex-col items-start">
           <MobileLanguageSelector lang={lang} setLang={setLang} />
         </div>
 
-        <div className="absolute top-4 right-5 z-10">
-          <TelegramButton size={38} />
+        <div className="absolute top-5 right-4 text-right z-10 flex justify-end">
+          <img
+            src="/logo.svg"
+            alt="Say it for me"
+            className="h-8 md:h-12 opacity-100 select-none pointer-events-none"
+          />
         </div>
 
-        <div className="absolute top-5 left-1/2 -translate-x-1/2 text-center z-10 w-full px-4">
-          <h1 className="text-3xl md:text-5xl font-bold text-black/30 tracking-tight mb-1">
-            Say it for me
-          </h1>
-          <p className="text-base md:text-lg text-black mt-1" style={{ fontFamily: 'Arial, sans-serif' }}>
-            Your assistant when words are hard to find
-          </p>
-        </div>
-
-        <div className="absolute left-0 right-0 top-[90px] md:top-[148px] bottom-[92px] px-4 md:px-6 z-20">
+        <div className="absolute left-0 right-0 top-[64px] md:top-[148px] bottom-[92px] px-4 md:px-6 z-20">
           <div className="h-full flex flex-col items-center">
             <div className="w-full max-w-[560px] md:max-w-[860px]">
               <div className="h-[340px] md:h-[520px] flex items-start justify-center relative">
@@ -2013,7 +2011,7 @@ export default function Page() {
                                   onClick={() => toggleFavorite(result.id)}
                                   className="w-8 h-8 rounded-full bg-white/50 flex items-center justify-center shadow-sm -mr-1"
                                 >
-                                  <HeartIcon size={16} filled={favorites.includes(result.id)} />
+                                  <HeartIcon size={16} filled={favorites.includes(result.id)} strokeColor="#FF3B30" />
                                 </button>
                               )}
                             </div>
@@ -2126,10 +2124,10 @@ export default function Page() {
                     speak();
                   }
                 }}
-                className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/70 grid place-items-center transition-none active:scale-95"
+                className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/70 grid place-items-center transition-none active:scale-95"
                 aria-label="Voice"
               >
-                <SpeakerIcon size={24} />
+                <SpeakerIcon size={20} />
               </button>
             )}
 
@@ -2146,10 +2144,10 @@ export default function Page() {
                   setSettingsOpenMobile(false);
                 }
               }}
-              className={`w-11 h-11 md:w-12 md:h-12 rounded-full grid place-items-center transition-none ${scenario === 'saved' ? 'bg-black text-white' : 'bg-white/70 text-black'}`}
+              className={`w-10 h-10 md:w-11 md:h-11 rounded-full grid place-items-center transition-none ${scenario === 'saved' ? 'bg-black text-white' : 'bg-white/70 text-black'}`}
               aria-label="Saved phrases"
             >
-              <HeartIcon filled={scenario === 'saved'} />
+              <HeartIcon size={16} filled={scenario === 'saved'} strokeColor="#FF3B30" />
             </button>
 
             <button
@@ -2163,10 +2161,10 @@ export default function Page() {
                   setSettingsOpenMobile(true);
                 }
               }}
-              className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-white/70 grid place-items-center transition-none"
+              className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-white/70 grid place-items-center transition-none"
               aria-label="Search situations"
             >
-              <SearchIcon />
+              <SearchIcon size={20} />
             </button>
 
             {scenario !== 'saved' && (
@@ -2179,10 +2177,10 @@ export default function Page() {
                   }
                   generateNext();
                 }}
-                className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-[#6fbf3f] text-white grid place-items-center shadow-xl transition-none active:scale-100"
+                className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-[#6fbf3f] text-white grid place-items-center shadow-xl transition-none active:scale-100"
                 aria-label="Generate"
               >
-                <TwoStarsIcon size={24} />
+                <TwoStarsIcon size={20} />
               </button>
             )}
           </div>
